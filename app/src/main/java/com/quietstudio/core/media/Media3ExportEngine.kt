@@ -7,12 +7,14 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Handler
 import android.os.HandlerThread
+import androidx.media3.common.Effect
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MimeTypes
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.effect.BitmapOverlay
 import androidx.media3.effect.OverlayEffect
 import androidx.media3.effect.Presentation
+import androidx.media3.effect.TextureOverlay
 import androidx.media3.transformer.Composition
 import androidx.media3.transformer.DefaultEncoderFactory
 import androidx.media3.transformer.EditedMediaItem
@@ -23,7 +25,6 @@ import androidx.media3.transformer.ExportResult
 import androidx.media3.transformer.ProgressHolder
 import androidx.media3.transformer.Transformer
 import androidx.media3.transformer.VideoEncoderSettings
-import com.google.common.collect.ImmutableList
 import com.quietstudio.core.model.BackgroundKind
 import com.quietstudio.core.model.Codec
 import com.quietstudio.core.model.MusicTrack
@@ -85,7 +86,7 @@ class Media3ExportEngine @Inject constructor() : MediaEngine {
 
             // ---- 2. build composition
             val overlay = TimelineOverlay(context, project, res.width, res.height, durationMs)
-            val overlayEffect = OverlayEffect(ImmutableList.of<BitmapOverlay>(overlay))
+            val overlayEffect = OverlayEffect(listOf<TextureOverlay>(overlay))
             val presentation = Presentation.createForWidthAndHeight(
                 res.width, res.height, Presentation.LAYOUT_SCALE_TO_FIT_WITH_CROP
             )
@@ -104,7 +105,9 @@ class Media3ExportEngine @Inject constructor() : MediaEngine {
                 EditedMediaItem.Builder(MediaItem.fromUri(Uri.fromFile(mixWav))).build()
             )
             val composition = Composition.Builder(videoSeq, audioSeq)
-                .setEffects(Effects(ImmutableList.of(), ImmutableList.of(presentation, overlayEffect)))
+                .setEffects(
+                    Effects(emptyList(), listOf<Effect>(presentation, overlayEffect))
+                )
                 .build()
 
             // ---- 3. transformer

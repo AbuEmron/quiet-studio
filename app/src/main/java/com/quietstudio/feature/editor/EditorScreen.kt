@@ -35,6 +35,7 @@ import androidx.compose.material.icons.rounded.FormatPaint
 import androidx.compose.material.icons.rounded.MusicNote
 import androidx.compose.material.icons.rounded.Pause
 import androidx.compose.material.icons.rounded.PlayArrow
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.Speed
 import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.material.icons.rounded.VerticalAlignCenter
@@ -56,6 +57,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -116,7 +118,7 @@ fun EditorScreen(
             ) {
                 androidx.compose.material3.IconButton(onClick = { renameDialog = true }) {
                     Icon(
-                        androidx.compose.material.icons.Icons.Rounded.Settings, "Project settings",
+                        Icons.Rounded.Settings, "Project settings",
                         tint = TextSecondary, modifier = Modifier.size(20.dp),
                     )
                 }
@@ -479,8 +481,6 @@ private fun WaveformTrack(
         }
     }
 }
-
-private typealias Offset = androidx.compose.ui.geometry.Offset
 
 /** Live preview: the same SceneRenderer + SubtitlePainter as export. */
 @Composable

@@ -776,6 +776,46 @@ private fun PillButton(
     }
 }
 
+private val FONT_OPTIONS = listOf(
+    "poppins_bold" to "Poppins Bold",
+    "poppins_semibold" to "Poppins Semi",
+    "poppins_medium" to "Poppins Med",
+    "inter" to "Inter",
+    "serif" to "Serif",
+    "mono" to "Mono",
+)
+
+@Composable
+private fun FontSelector(selected: String, onSelect: (String) -> Unit) {
+    LazyRow(
+        modifier = Modifier.width(216.dp),
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+    ) {
+        items(FONT_OPTIONS) { (id, label) ->
+            val sel = id == selected
+            Box(
+                Modifier
+                    .background(
+                        if (sel) Violet.copy(alpha = 0.18f) else CardHigh,
+                        RoundedCornerShape(10.dp),
+                    )
+                    .then(
+                        if (sel) Modifier.border(1.dp, Violet, RoundedCornerShape(10.dp))
+                        else Modifier
+                    )
+                    .clickable { onSelect(id) }
+                    .padding(horizontal = 10.dp, vertical = 8.dp),
+            ) {
+                Text(
+                    label, style = MaterialTheme.typography.labelSmall,
+                    color = if (sel) Color.White else TextSecondary,
+                    maxLines = 1,
+                )
+            }
+        }
+    }
+}
+
 @Composable
 private fun SettingRow(label: String, content: @Composable () -> Unit) {
     Row(
