@@ -489,6 +489,68 @@ object SceneCatalog {
         ),
     )
 
+    /* ------------------ Wave 4 · Electric, completing (5) ---------------- */
+
+    private val POLES_VANISHING = SceneSpec(
+        id = "poles-vanishing", name = "Poles to the Vanishing Point", group = SceneGroup.ELECTRIC,
+        layers = listOf(
+            Sky(listOf(c(0xFF8FB4D9), c(0xFFCBD9DE), c(0xFFF2E4C4)), extent = 0.7f),
+            Clouds(color = c(0xFFFFFFFF), count = 5, alpha = 190, wrapsPerMin = 0.9f, bandBottom = 0.4f),
+            Ridge(c(0xFF9CB08C), baseY = 0.60f, amp = 0.02f, detail = 2),
+            PowerLines(color = c(0xFF2A2436), poles = 6, horizonY = 0.60f, perspective = true, birds = 3),
+            Grass(c(0xFF5A7248), sway = 0.7f, height = 0.16f),
+        ),
+    )
+
+    private val CHAINLINK_WEEDS = SceneSpec(
+        id = "chainlink-weeds", name = "Chain-link at Dusk", group = SceneGroup.ELECTRIC,
+        layers = listOf(
+            Sky(listOf(c(0xFF4E3D66), c(0xFFB56E64), c(0xFFE8A867)), extent = 0.75f),
+            Celestial(SUN, x = 0.68f, y = 0.44f, radius = 0.10f, color = c(0xFFFFE0AC), glow = c(0x66FFA862)),
+            Ridge(c(0xFF35283F), baseY = 0.60f, amp = 0.02f, detail = 2, kind = BLOCKS),
+            PowerLines(color = c(0xFF211829), poles = 3, horizonY = 0.56f),
+            Grass(c(0xFF241B2E), sway = 1.1f, height = 0.26f),
+            Particles(SEEDS, color = c(0x99FFD9A0), count = 12),
+        ),
+    )
+
+    private val SMOKESTACKS = SceneSpec(
+        id = "smokestacks", name = "Distant Smokestacks", group = SceneGroup.ELECTRIC,
+        layers = listOf(
+            Sky(listOf(c(0xFF6A5A6E), c(0xFFB08A78), c(0xFFE6C48E)), extent = 0.8f),
+            Celestial(SUN, x = 0.5f, y = 0.34f, radius = 0.09f, color = c(0xFFFBE0B0), glow = c(0x55E8A060)),
+            Clouds(color = c(0xFF9A8898), count = 4, alpha = 130, wrapsPerMin = 0.4f, bandBottom = 0.35f),
+            Ridge(c(0xFF4A3E50), baseY = 0.62f, amp = 0.03f, detail = 3, kind = BLOCKS, seedSalt = 5L),
+            Ridge(c(0xFF352C3E), baseY = 0.74f, amp = 0.10f, detail = 2, kind = BLOCKS, seedSalt = 11L),
+            Ridge(c(0xFF241D2E), baseY = 0.88f, amp = 0.02f, detail = 2, kind = BLOCKS, seedSalt = 15L),
+            Mist(color = c(0x33B0A0A8), bands = 2, bandTop = 0.5f, bandBottom = 0.66f),
+        ),
+    )
+
+    private val LONE_HILL = SceneSpec(
+        id = "lone-hill", name = "Lone Hill, Huge Sky", group = SceneGroup.ELECTRIC,
+        layers = listOf(
+            Sky(listOf(c(0xFF3F8FD2), c(0xFF8FC5E8), c(0xFFDDEBF0)), extent = 0.9f),
+            Clouds(color = c(0xFFFFFFFF), count = 8, alpha = 235, wrapsPerMin = 1.0f, scale = 1.5f, bandBottom = 0.6f),
+            Celestial(SUN, x = 0.82f, y = 0.16f, radius = 0.08f, color = c(0xFFFFFBE6), glow = c(0x55FFF2B8)),
+            Ridge(c(0xFF5E9A54), baseY = 0.80f, amp = 0.09f, detail = 2),
+            PowerLines(color = c(0xFF243A20), poles = 1, horizonY = 0.78f),
+            Grass(c(0xFF3B7A3E), sway = 0.9f, height = 0.14f),
+        ),
+    )
+
+    private val STORM_HORIZON = SceneSpec(
+        id = "storm-horizon", name = "Electric-storm Horizon", group = SceneGroup.ELECTRIC,
+        layers = listOf(
+            Sky(listOf(c(0xFF15182A), c(0xFF272B44), c(0xFF3E3A55)), extent = 0.8f),
+            Clouds(color = c(0xFF3A3E56), count = 5, alpha = 170, wrapsPerMin = 0.7f, bandBottom = 0.4f),
+            Particles(SHOOTING_STAR, color = c(0xFFDCE0FF), count = 1),
+            Ridge(c(0xFF1A1D2E), baseY = 0.66f, amp = 0.02f, detail = 2, kind = BLOCKS),
+            PowerLines(color = c(0xFF0E1020), poles = 4, horizonY = 0.64f, birds = 2),
+            WaterBand(top = 0.78f, bottom = 0.92f, deep = c(0xFF0C0E1A), light = c(0xFF3A4062), glintColor = c(0x66AEB8E0)),
+        ),
+    )
+
     /** Wave 1. Later waves append here; ids are forever. */
     val ALL: List<SceneSpec> = listOf(
         ROLLING_HILLS, TERRACE_GOLD, RIVER_BEND, BLOSSOM_DRIFT, SUMMER_FIELDS,
@@ -498,6 +560,7 @@ object SceneCatalog {
         NEON_DINER, TWIN_SUN_DESERT, ASTEROID_DRIFT, AURORA_PLANET, ORBIT_CITY,
         NEON_ALLEY, ROOFTOP_SKYLINE, LAST_TRAIN, VENDING_GLOW, BACKSTREET_LANTERNS,
         RAIN_ON_GLASS, HIGHWAY_RIBBON, HARBOR_DUSK, CROSSWALK_NEON, WINDOW_BOKEH,
+        POLES_VANISHING, CHAINLINK_WEEDS, SMOKESTACKS, LONE_HILL, STORM_HORIZON,
     )
 
     private val byId = ALL.associateBy { it.id }
