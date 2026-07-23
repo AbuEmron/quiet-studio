@@ -78,6 +78,18 @@ class SpecSceneRenderer(private val width: Int, private val height: Int) {
                 is Lanterns -> lanterns(canvas, layer)
                 is PowerLines -> powerLines(canvas, layer)
                 is Particles -> particles(canvas, layer)
+                is Nebula -> nebula(canvas, layer)
+                is Planet -> planet(canvas, layer)
+                is Aurora -> aurora(canvas, layer)
+                is WarpStreaks -> warpStreaks(canvas, layer)
+                is SpaceSkyline -> spaceSkyline(canvas, layer)
+                is WindowGrid -> windowGrid(canvas, layer)
+                is Neon -> neon(canvas, layer)
+                is Reflections -> reflections(canvas, layer)
+                is RainGlass -> rainGlass(canvas, layer)
+                is Bokeh -> bokeh(canvas, layer)
+                is TrafficStream -> trafficStream(canvas, layer)
+                is LightBox -> lightBox(canvas, layer)
             }
         }
     }
@@ -506,5 +518,289 @@ class SpecSceneRenderer(private val width: Int, private val height: Int) {
                 }
             }
         }
+    }
+
+    /* --------------------------- cosmic layers --------------------------- */
+
+    private fun nebula(canvas: Canvas, l: Nebula) {
+        val w = width.toFloat(); val h = height.toFloat()
+        val rnd = Random(seed * 83)
+        val breathe = 0.9f + 0.1f * oscW(0.06f, 0f)
+        for (i in 0 until l.blobs) {
+            val col = l.colors[i % l.colors.size]
+            val bx = w * (l.cx + (rnd.nextFloat() - 0.5f) * l.spread)
+            val by = h * (l.cy + (rnd.nextFloat() - 0.5f) * l.spread * 0.7f)
+            val r = w * (0.16f + rnd.nextFloat() * 0.22f) * breathe
+            paint.shader = RadialGradient(
+                bx, by, r, intArrayOf(col, 0x00000000), null, Shader.TileMode.CLAMP,
+            )
+            canvas.drawCircle(bx, by, r, paint)
+        }
+        paint.shader = null
+    }
+
+    private fun planet(canvas: Canvas, l: Planet) {
+        val w = width.toFloat(); val h = height.toFloat()
+        val cx = w * l.x
+        val cy = h * l.y + oscW(0.05f, 3f) * h * 0.004f
+        val r = w * l.radius
+
+        paint.shader = RadialGradient(
+            cx, cy, r * 2.6f, intArrayOf(l.glow, 0x00000000), null, Shader.TileMode.CLAMP,
+        )
+        canvas.drawCircle(cx, cy, r * 2.6f, paint)
+        paint.shader = null
+
+        if (l.hasRing) {
+            paint.style = Paint.Style.STROKE
+            paint.strokeWidth = r * 0.12f
+            paint.color = l.ring
+            for (rr in 0 until 3) {
+                val rw = r * (1.7f + rr * 0.16f)
+                canvas.drawOval(
+                    RectF(cx - rw, cy - rw * l.ringTilt, cx + rw, cy + rw * l.ringTilt), paint,
+                )
+            }
+            paint.style = Paint.Style.FILL
+        }
+
+        paint.shader = LinearGradient(
+            cx, cy - r, cx, cy + r, l.body.toIntArray(), null, Shader.TileMode.CLAMP,
+        )
+        canvas.drawCircle(cx, cy, r, paint)
+        paint.shader = null
+        // terminator shadow
+        paint.color = 0x33000010
+        canvas.drawCircle(cx + r * 0.28f, cy, r, paint)
+    }
+
+    private fun aurora(canvas: Canvas, l: Aurora) {
+        val w = width.toFloat(); val h = height.toFloat()
+        paint.style = Paint.Style.STROKE
+        for (b in 0 until l.bands) {
+            val col = l.colors[b % l.colors.size]
+            val yBase = h * (l.top + l.height * b / l.bands.coerceAtLeast(1))
+            paint.color = col
+            paint.strokeWidth = h * (0.02f + 0.015f * (b % 2))
+            path.reset()
+            val steps = 40
+            for (i in 0..steps) {
+                val x = i * w / steps
+                val phase = b * 1.4f
+                val y = yBase +
+                    sin(TWO_PI * (1 + b % 2) * (x / w) + phase + oscW(0.1f, phase) * 0.6f) * h * 0.05f
+                if (i == 0) path.moveTo(x, y) else path.lineTo(x, y)
+            }
+            canvas.drawPath(path, paint)
+        }
+        paint.style = Paint.Style.FILL
+    }
+
+    private fun warpStreaks(canvas: Canvas, l: WarpStreaks) {
+        val w = width.toFloat(); val h = height.toFloat()
+        val cx = w * l.cx; val cy = h * l.cy
+        val rnd = Random(seed * 97)
+        paint.strokeCap = Paint.Cap.ROUND
+        for (i in 0 until l.count) {
+            val ang = rnd.nextFloat() * TWO_PI
+            // streak length pulses through whole cycles → seamless
+            val phase = rnd.nextFloat()
+            val k = ((prog + phase) % 1f)
+            val near = 0.08f + k * 0.9f
+            val far = near + 0.10f + 0.12f * k
+            val dx = kotlin.math.cos(ang); val dy = sin(ang)
+            val reach = (w + h) * 0.5f
+            paint.color = l.color
+            paint.alpha = (200 * (1f - kotlin.math.abs(k - 0.5f) * 1.4f)).toInt().coerceIn(0, 255)
+            paint.strokeWidth = w * 0.003f * (0.4f + k)
+            canvas.drawLine(
+                cx + dx * reach * near, cy + dy * reach * near,
+                cx + dx * reach * far, cy + dy * reach * far, paint,
+            )
+        }
+        paint.alpha = 255
+    }
+
+    private fun spaceSkyline(canvas: Canvas, l: SpaceSkyline) {
+        val w = width.toFloat(); val h = height.toFloat()
+        val rnd = Random(seed * 103)
+        val baseY = h * l.horizonY
+        paint.color = l.silhouette
+        var x = 0f
+        val towerData = ArrayList<FloatArray>()
+        while (x < w) {
+            val tw = w * (0.05f + rnd.nextFloat() * 0.07f)
+            val th = h * (0.10f + rnd.nextFloat() * 0.26f)
+            canvas.drawRect(x, baseY - th, x + tw * 0.92f, baseY, paint)
+            towerData.add(floatArrayOf(x, baseY - th, tw * 0.92f, th))
+            x += tw
+        }
+        // lit windows, some flicker on whole-cycle schedule
+        for ((ti, t) in towerData.withIndex()) {
+            val cols = (t[2] / (w * 0.016f)).toInt().coerceAtLeast(1)
+            val rows = (t[3] / (h * 0.02f)).toInt().coerceAtLeast(1)
+            for (cy2 in 0 until rows) for (cx2 in 0 until cols) {
+                if (rnd.nextFloat() > 0.45f) continue
+                val flick = 0.6f + 0.4f * (0.5f + 0.5f * oscW(0.4f + rnd.nextFloat(), (ti * 7 + cx2 + cy2).toFloat()))
+                paint.color = l.windowColor
+                paint.alpha = (200 * flick).toInt()
+                val wx = t[0] + t[2] * (cx2 + 0.5f) / cols
+                val wy = t[1] + t[3] * (cy2 + 0.5f) / rows
+                canvas.drawRect(wx - w * 0.004f, wy - h * 0.006f, wx + w * 0.004f, wy + h * 0.006f, paint)
+            }
+        }
+        paint.alpha = 255
+    }
+
+    /* ---------------------------- night layers --------------------------- */
+
+    private fun windowGrid(canvas: Canvas, l: WindowGrid) {
+        val w = width.toFloat(); val h = height.toFloat()
+        val left = w * l.left; val top = h * l.top
+        val right = w * l.right; val bottom = h * l.bottom
+        paint.color = l.wall
+        canvas.drawRect(left, top, right, bottom, paint)
+        val rnd = Random(seed * 109 + (l.left * 1000).toLong())
+        val cw = (right - left) / l.cols
+        val rh = (bottom - top) / l.rows
+        for (r in 0 until l.rows) for (col in 0 until l.cols) {
+            if (rnd.nextFloat() > l.litFraction) continue
+            val flick = 0.55f + 0.45f * (0.5f + 0.5f * oscW(0.3f + rnd.nextFloat() * 0.6f, (r * 5 + col).toFloat()))
+            paint.color = l.window
+            paint.alpha = (210 * flick).toInt()
+            val wx = left + cw * (col + 0.5f)
+            val wy = top + rh * (r + 0.5f)
+            canvas.drawRect(wx - cw * 0.3f, wy - rh * 0.32f, wx + cw * 0.3f, wy + rh * 0.32f, paint)
+        }
+        paint.alpha = 255
+    }
+
+    private fun neon(canvas: Canvas, l: Neon) {
+        val w = width.toFloat(); val h = height.toFloat()
+        val cx = w * l.x; val cy = h * l.y
+        val bw = w * l.w; val bh = h * l.h
+        val pulse = 0.7f + 0.3f * (0.5f + 0.5f * oscW(0.5f, l.x * 11f))
+        paint.shader = RadialGradient(
+            cx, cy, maxOf(bw, bh) * 1.8f,
+            intArrayOf((l.color and 0x00FFFFFF) or 0x66000000, 0x00000000), null, Shader.TileMode.CLAMP,
+        )
+        paint.alpha = (255 * pulse).toInt()
+        canvas.drawCircle(cx, cy, maxOf(bw, bh) * 1.8f, paint)
+        paint.shader = null
+        paint.color = l.color
+        paint.alpha = (255 * (0.7f + 0.3f * pulse)).toInt()
+        val rad = if (l.vertical) bw * 0.5f else bh * 0.5f
+        canvas.drawRoundRect(RectF(cx - bw / 2f, cy - bh / 2f, cx + bw / 2f, cy + bh / 2f), rad, rad, paint)
+        paint.alpha = 255
+    }
+
+    private fun reflections(canvas: Canvas, l: Reflections) {
+        val w = width.toFloat(); val h = height.toFloat()
+        val top = h * l.top; val bottom = h * l.bottom
+        // dark wet base
+        paint.shader = LinearGradient(
+            0f, top, 0f, bottom,
+            intArrayOf(0xCC0A0C14.toInt(), 0xFF05060B.toInt()), null, Shader.TileMode.CLAMP,
+        )
+        canvas.drawRect(0f, top, w, bottom, paint)
+        paint.shader = null
+        val rnd = Random(seed * 127)
+        for (i in 0 until l.colors.size * 3) {
+            val col = l.colors[i % l.colors.size]
+            val x = rnd.nextFloat() * w
+            val ww = w * (0.02f + rnd.nextFloat() * 0.05f)
+            val wob = w * 0.01f * oscW(0.3f + rnd.nextFloat() * 0.5f, i.toFloat())
+            paint.shader = LinearGradient(
+                0f, top, 0f, bottom,
+                intArrayOf((col and 0x00FFFFFF) or 0x55000000, 0x00000000), null, Shader.TileMode.CLAMP,
+            )
+            canvas.drawRect(x - ww / 2f + wob, top, x + ww / 2f + wob, bottom, paint)
+        }
+        paint.shader = null
+    }
+
+    private fun rainGlass(canvas: Canvas, l: RainGlass) {
+        val w = width.toFloat(); val h = height.toFloat()
+        val rnd = Random(seed * 131)
+        paint.color = l.color
+        paint.strokeCap = Paint.Cap.ROUND
+        val fall = 0.5f * (0.5f + drift)
+        for (i in 0 until l.streaks) {
+            val x = rnd.nextFloat() * w
+            val span = h * 1.2f
+            val y = ((rnd.nextFloat() * span + wraps(fall * (0.7f + rnd.nextFloat() * 0.6f)) * span) % span) - h * 0.1f
+            val len = h * (0.04f + rnd.nextFloat() * 0.08f)
+            paint.strokeWidth = w * (0.002f + rnd.nextFloat() * 0.002f)
+            canvas.drawLine(x, y, x, y + len, paint)
+            // a bead
+            if (rnd.nextFloat() > 0.7f) canvas.drawCircle(x, y + len, w * 0.004f, paint)
+        }
+    }
+
+    private fun bokeh(canvas: Canvas, l: Bokeh) {
+        val w = width.toFloat(); val h = height.toFloat()
+        val rnd = Random(seed * 137)
+        for (i in 0 until l.count) {
+            val col = l.colors[i % l.colors.size]
+            val bx = rnd.nextFloat() * w + w * 0.03f * oscW(0.08f + rnd.nextFloat() * 0.1f, i * 1.3f)
+            val by = h * (l.bandTop + rnd.nextFloat() * (l.bandBottom - l.bandTop)) +
+                h * 0.02f * oscW(0.07f, i * 2.1f)
+            val r = w * (0.02f + rnd.nextFloat() * 0.05f)
+            val pulse = 0.4f + 0.6f * (0.5f + 0.5f * oscW(0.3f + rnd.nextFloat() * 0.5f, i.toFloat()))
+            paint.shader = RadialGradient(
+                bx, by, r, intArrayOf(col, (col and 0x00FFFFFF)), null, Shader.TileMode.CLAMP,
+            )
+            paint.alpha = (150 * pulse).toInt()
+            canvas.drawCircle(bx, by, r, paint)
+        }
+        paint.shader = null
+        paint.alpha = 255
+    }
+
+    private fun trafficStream(canvas: Canvas, l: TrafficStream) {
+        val w = width.toFloat(); val h = height.toFloat()
+        val y = h * l.y
+        val rnd = Random(seed * 149)
+        val span = w * 1.2f
+        val perSec = l.wrapsPerMin / 60f * (0.4f + drift)
+        for (i in 0 until l.count) {
+            val warm = i % 2 == 0
+            val speed = perSec * (0.8f + rnd.nextFloat() * 0.5f) * (if (warm) 1f else -1f)
+            val x0 = rnd.nextFloat() * span
+            val x = ((x0 + wraps(kotlin.math.abs(speed)) * span * (if (warm) 1 else -1)) % span + span) % span - w * 0.1f
+            val yy = y + (if (warm) 0f else h * 0.02f) + h * 0.006f * (i % 3)
+            paint.color = if (warm) l.warm else l.cool
+            paint.alpha = 220
+            canvas.drawRect(x, yy, x + w * 0.03f, yy + h * 0.004f, paint)
+            // glow
+            paint.shader = RadialGradient(
+                x + w * 0.015f, yy, w * 0.03f,
+                intArrayOf((paint.color and 0x00FFFFFF) or 0x66000000, 0x00000000), null, Shader.TileMode.CLAMP,
+            )
+            canvas.drawCircle(x + w * 0.015f, yy, w * 0.03f, paint)
+            paint.shader = null
+        }
+        paint.alpha = 255
+    }
+
+    private fun lightBox(canvas: Canvas, l: LightBox) {
+        val w = width.toFloat(); val h = height.toFloat()
+        val cx = w * l.x; val cy = h * l.y
+        val bw = w * l.w; val bh = h * l.h
+        val pulse = 0.85f + 0.15f * (0.5f + 0.5f * oscW(0.5f, l.x * 5f))
+        paint.shader = RadialGradient(
+            cx, cy, maxOf(bw, bh) * 1.6f, intArrayOf(l.glow, 0x00000000), null, Shader.TileMode.CLAMP,
+        )
+        paint.alpha = (255 * pulse).toInt()
+        canvas.drawCircle(cx, cy, maxOf(bw, bh) * 1.6f, paint)
+        paint.shader = null
+        paint.alpha = 255
+        paint.shader = LinearGradient(
+            cx, cy - bh / 2f, cx, cy + bh / 2f, l.face.toIntArray(), null, Shader.TileMode.CLAMP,
+        )
+        canvas.drawRoundRect(
+            RectF(cx - bw / 2f, cy - bh / 2f, cx + bw / 2f, cy + bh / 2f), w * 0.01f, w * 0.01f, paint,
+        )
+        paint.shader = null
     }
 }

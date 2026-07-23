@@ -8,6 +8,7 @@ import com.quietstudio.core.media.scenes.ParticleKind.LEAVES
 import com.quietstudio.core.media.scenes.ParticleKind.PETALS
 import com.quietstudio.core.media.scenes.ParticleKind.SEEDS
 import com.quietstudio.core.media.scenes.ParticleKind.SHOOTING_STAR
+import com.quietstudio.core.media.scenes.ParticleKind.SNOW
 import com.quietstudio.core.media.scenes.ParticleKind.STARS
 import com.quietstudio.core.media.scenes.RidgeKind.BLOCKS
 
@@ -231,11 +232,145 @@ object SceneCatalog {
         ),
     )
 
+    /* ----------------------- Wave 2 · Cosmic (10) ------------------------ */
+
+    private val STAR_DRIFT = SceneSpec(
+        id = "star-drift", name = "Star Drift", group = SceneGroup.COSMIC,
+        layers = listOf(
+            Sky(listOf(c(0xFF05060F), c(0xFF0B0D22), c(0xFF141634)), extent = 1f),
+            Particles(STARS, color = c(0xFFBFC8FF), count = 70, bandBottom = 1f, size = 0.8f),
+            Particles(STARS, color = c(0xFFFFFFFF), count = 40, bandBottom = 1f, size = 1.4f),
+            Nebula(listOf(c(0x33324C8A), c(0x2A6A3C7E)), cx = 0.6f, cy = 0.4f, spread = 0.8f, blobs = 5),
+            Particles(SHOOTING_STAR, color = c(0xFFDCE6FF), count = 1),
+        ),
+    )
+
+    private val NEBULA_DRIFT = SceneSpec(
+        id = "nebula-drift", name = "Nebula Drift", group = SceneGroup.COSMIC,
+        layers = listOf(
+            Sky(listOf(c(0xFF0A0716), c(0xFF160B2A), c(0xFF0A0716)), extent = 1f),
+            Nebula(listOf(c(0x55C0348A), c(0x4422B0A8), c(0x44E0559E)), cx = 0.45f, cy = 0.42f, spread = 0.9f, blobs = 8),
+            Nebula(listOf(c(0x3320C4C4), c(0x33B03CA0)), cx = 0.7f, cy = 0.6f, spread = 0.6f, blobs = 5),
+            Particles(STARS, color = c(0xFFFFFFFF), count = 80, bandBottom = 1f),
+            Particles(STARS, color = c(0xFFFFD9F4), count = 20, bandBottom = 1f, size = 1.6f),
+        ),
+    )
+
+    private val RING_RISE = SceneSpec(
+        id = "ring-rise", name = "Ring Rise", group = SceneGroup.COSMIC,
+        layers = listOf(
+            Sky(listOf(c(0xFF0B0A1E), c(0xFF1E1636), c(0xFF3A2450)), extent = 0.9f),
+            Particles(STARS, color = c(0xFFEFF0FF), count = 60, bandBottom = 0.7f),
+            Nebula(listOf(c(0x2A7A3C9E)), cx = 0.3f, cy = 0.3f, spread = 0.5f, blobs = 3),
+            Planet(
+                x = 0.62f, y = 0.60f, radius = 0.26f,
+                body = listOf(c(0xFFE0A867), c(0xFFB4703E), c(0xFF6E3C28)),
+                ring = c(0xCCD8B98A), ringTilt = 0.30f, glow = c(0x33FFD9A0),
+            ),
+            Ridge(c(0xFF120E22), baseY = 0.86f, amp = 0.03f, detail = 3),
+        ),
+    )
+
+    private val COMET_ROAD = SceneSpec(
+        id = "comet-road", name = "Comet Road", group = SceneGroup.COSMIC,
+        layers = listOf(
+            Sky(listOf(c(0xFF040610), c(0xFF0A1030), c(0xFF122048)), extent = 1f),
+            Particles(STARS, color = c(0xFFCAD4FF), count = 90, bandBottom = 1f),
+            Nebula(listOf(c(0x2830708A)), cx = 0.5f, cy = 0.5f, spread = 1f, blobs = 4),
+            Particles(SHOOTING_STAR, color = c(0xFFEAF2FF), count = 1),
+            Particles(SHOOTING_STAR, color = c(0xFFBFD8FF), count = 1),
+        ),
+    )
+
+    private val WARP_JUMP = SceneSpec(
+        id = "warp-jump", name = "Warp Jump", group = SceneGroup.COSMIC,
+        layers = listOf(
+            Sky(listOf(c(0xFF05030E), c(0xFF0B0820), c(0xFF05030E)), extent = 1f),
+            WarpStreaks(color = c(0xFFBFD0FF), cx = 0.5f, cy = 0.46f, count = 120),
+            Nebula(listOf(c(0x33305CC0), c(0x2288308A)), cx = 0.5f, cy = 0.46f, spread = 0.4f, blobs = 3),
+        ),
+    )
+
+    private val NEON_DINER = SceneSpec(
+        id = "neon-diner", name = "Neon Diner", group = SceneGroup.COSMIC,
+        layers = listOf(
+            Sky(listOf(c(0xFF08061A), c(0xFF130B2E), c(0xFF1E1240)), extent = 0.9f),
+            Particles(STARS, color = c(0xFFEFF0FF), count = 50, bandBottom = 0.55f),
+            Planet(
+                x = 0.16f, y = 0.22f, radius = 0.08f, hasRing = false,
+                body = listOf(c(0xFF5E77C9), c(0xFF2E3E6E)), ring = 0, glow = c(0x33708FD9),
+            ),
+            Ridge(c(0xFF15112A), baseY = 0.70f, amp = 0.02f, detail = 2, kind = BLOCKS),
+            LightBox(
+                glow = c(0x66FF5AA8), x = 0.5f, y = 0.66f, w = 0.42f, h = 0.14f,
+                face = listOf(c(0xFF3A1830), c(0xFF20101C)),
+            ),
+            Neon(color = c(0xFFFF5AA8), x = 0.5f, y = 0.60f, w = 0.30f, h = 0.020f),
+            Neon(color = c(0xFF34E0D0), x = 0.5f, y = 0.635f, w = 0.20f, h = 0.014f),
+            Reflections(listOf(c(0xFFFF5AA8), c(0xFF34E0D0)), top = 0.80f),
+        ),
+    )
+
+    private val TWIN_SUN_DESERT = SceneSpec(
+        id = "twin-sun-desert", name = "Twin Sun Desert", group = SceneGroup.COSMIC,
+        layers = listOf(
+            Sky(listOf(c(0xFFE9A96A), c(0xFFE8C48E), c(0xFFF2E0BC)), extent = 0.8f),
+            Celestial(CelestialKind.TWIN_SUNS, x = 0.42f, y = 0.30f, radius = 0.085f, color = c(0xFFFFF0D2), glow = c(0x66FFC074)),
+            Ridge(c(0xFFCB9A5E), baseY = 0.64f, amp = 0.05f, detail = 3),
+            Ridge(c(0xFFA9773F), baseY = 0.76f, amp = 0.06f, detail = 3),
+            Ridge(c(0xFF7E5730), baseY = 0.88f, amp = 0.05f, detail = 3),
+            Particles(SEEDS, color = c(0x99FFE9C0), count = 10),
+        ),
+    )
+
+    private val ASTEROID_DRIFT = SceneSpec(
+        id = "asteroid-drift", name = "Asteroid Drift", group = SceneGroup.COSMIC,
+        layers = listOf(
+            Sky(listOf(c(0xFF06070F), c(0xFF0C0F24), c(0xFF10132C)), extent = 1f),
+            Particles(STARS, color = c(0xFFD4DCFF), count = 70, bandBottom = 1f),
+            Nebula(listOf(c(0x22506AA0)), cx = 0.4f, cy = 0.5f, spread = 0.8f, blobs = 3),
+            Planet(
+                x = 0.80f, y = 0.24f, radius = 0.10f, hasRing = false,
+                body = listOf(c(0xFF8A6ABF), c(0xFF43305E)), ring = 0, glow = c(0x33A07CD9),
+            ),
+            CloudShadows(color = c(0x66101828), count = 5, bandTop = 0.45f, bandBottom = 0.8f, wrapsPerMin = 0.9f),
+            Particles(SNOW, color = c(0xFF6A6E82), count = 20, size = 2.4f, speed = 0.5f),
+        ),
+    )
+
+    private val AURORA_PLANET = SceneSpec(
+        id = "aurora-planet", name = "Aurora Planet", group = SceneGroup.COSMIC,
+        layers = listOf(
+            Sky(listOf(c(0xFF030A10), c(0xFF06131C), c(0xFF0A1C24)), extent = 1f),
+            Particles(STARS, color = c(0xFFE0F0FF), count = 60, bandBottom = 0.5f),
+            Aurora(listOf(c(0x8834E0A0), c(0x6640C0C8), c(0x55A050D0)), top = 0.34f, height = 0.24f, bands = 5),
+            Ridge(c(0xFF08161C), baseY = 0.74f, amp = 0.05f, detail = 4),
+            Ridge(c(0xFF040D11), baseY = 0.88f, amp = 0.04f, detail = 4),
+        ),
+    )
+
+    private val ORBIT_CITY = SceneSpec(
+        id = "orbit-city", name = "Orbit City", group = SceneGroup.COSMIC,
+        layers = listOf(
+            Sky(listOf(c(0xFF0A0722), c(0xFF1B1140), c(0xFF2E1A55)), extent = 0.9f),
+            Particles(STARS, color = c(0xFFEFF0FF), count = 55, bandBottom = 0.6f),
+            Planet(
+                x = 0.22f, y = 0.20f, radius = 0.13f,
+                body = listOf(c(0xFF6E5AC0), c(0xFF34285E)),
+                ring = c(0xAA9C86D8), ringTilt = 0.28f, glow = c(0x33A07CD9),
+            ),
+            SpaceSkyline(silhouette = c(0xFF140E2C), windowColor = c(0xFF7FD8FF), horizonY = 0.80f, towers = 10),
+            Reflections(listOf(c(0xFF7FD8FF), c(0xFFB98CFF)), top = 0.86f),
+        ),
+    )
+
     /** Wave 1. Later waves append here; ids are forever. */
     val ALL: List<SceneSpec> = listOf(
         ROLLING_HILLS, TERRACE_GOLD, RIVER_BEND, BLOSSOM_DRIFT, SUMMER_FIELDS,
         FOREST_LIGHT, GULL_CLIFFS, WIND_OVER_GRASS, MISTY_MORNING, LANTERN_PATH,
         WIRES_AT_SUNSET, OVERPASS, ROOFTOP_STATIC, BLUE_HOUR_BANK, VANISHING_LINE,
+        STAR_DRIFT, NEBULA_DRIFT, RING_RISE, COMET_ROAD, WARP_JUMP,
+        NEON_DINER, TWIN_SUN_DESERT, ASTEROID_DRIFT, AURORA_PLANET, ORBIT_CITY,
     )
 
     private val byId = ALL.associateBy { it.id }

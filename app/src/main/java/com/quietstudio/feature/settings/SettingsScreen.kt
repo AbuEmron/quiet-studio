@@ -157,7 +157,7 @@ fun SettingsScreen(
 
         SectionLabel("About")
         Text(
-            "Quiet Studio 1.4 — a private production room for one creator.",
+            "Quiet Studio 1.5 — a private production room for one creator.",
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp),

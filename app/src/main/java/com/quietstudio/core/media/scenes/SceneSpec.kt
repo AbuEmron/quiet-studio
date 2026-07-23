@@ -157,3 +157,118 @@ data class Particles(
     /** For STARS: fraction of frame height the field occupies. */
     val bandBottom: Float = 0.5f,
 ) : Layer
+
+/* --------------------------- cosmic layers --------------------------- */
+
+/** Soft billowing nebula cloud — layered radial blobs that slowly breathe. */
+data class Nebula(
+    val colors: List<Int>,
+    val cx: Float = 0.5f,
+    val cy: Float = 0.42f,
+    val spread: Float = 0.6f,
+    val blobs: Int = 7,
+) : Layer
+
+/** A ringed planet sitting on or above the horizon, with an elliptical ring. */
+data class Planet(
+    val x: Float,
+    val y: Float,
+    val radius: Float,
+    val body: List<Int>,          // vertical gradient across the disc
+    val ring: Int,
+    val ringTilt: Float = 0.34f,
+    val glow: Int = 0x33FFFFFF,
+    val hasRing: Boolean = true,
+) : Layer
+
+/** Horizontal light band low on a dark planet — an aurora that undulates. */
+data class Aurora(
+    val colors: List<Int>,
+    val top: Float = 0.30f,
+    val height: Float = 0.22f,
+    val bands: Int = 4,
+) : Layer
+
+/** Streaks radiating from a vanishing point — a warp / hyperspace jump. */
+data class WarpStreaks(
+    val color: Int,
+    val cx: Float = 0.5f,
+    val cy: Float = 0.5f,
+    val count: Int = 90,
+) : Layer
+
+/** Retro-futuristic skyline of lit towers along the horizon, in space. */
+data class SpaceSkyline(
+    val silhouette: Int,
+    val windowColor: Int,
+    val horizonY: Float = 0.72f,
+    val towers: Int = 9,
+) : Layer
+
+/* ---------------------------- night layers --------------------------- */
+
+/**
+ * A wall of city windows — a lit building face. Some windows flicker on a
+ * whole-cycle schedule so it loops. Used for skylines, alleys, backstreets.
+ */
+data class WindowGrid(
+    val wall: Int,
+    val window: Int,
+    val left: Float,
+    val top: Float,
+    val right: Float,
+    val bottom: Float,
+    val cols: Int = 6,
+    val rows: Int = 10,
+    val litFraction: Float = 0.55f,
+) : Layer
+
+/** Glowing neon sign — a rounded bar or vertical strip with a halo. */
+data class Neon(
+    val color: Int,
+    val x: Float,
+    val y: Float,
+    val w: Float,
+    val h: Float,
+    val vertical: Boolean = false,
+) : Layer
+
+/** Wet-ground reflection band: mirrors neon color as soft vertical smears. */
+data class Reflections(
+    val colors: List<Int>,
+    val top: Float,
+    val bottom: Float = 1f,
+) : Layer
+
+/** Rain running down the "glass" — streaks plus slow beading, for window scenes. */
+data class RainGlass(
+    val color: Int = 0x66CADCE8,
+    val streaks: Int = 40,
+) : Layer
+
+/** Out-of-focus city lights — soft bokeh discs that drift and pulse. */
+data class Bokeh(
+    val colors: List<Int>,
+    val count: Int = 18,
+    val bandTop: Float = 0.1f,
+    val bandBottom: Float = 0.9f,
+) : Layer
+
+/** Horizontal string of moving highway lights along a line (head/tail lamps). */
+data class TrafficStream(
+    val warm: Int = 0xFFFFD9A0.toInt(),
+    val cool: Int = 0xFFFF5A5A.toInt(),
+    val y: Float = 0.7f,
+    val count: Int = 16,
+    val wrapsPerMin: Float = 6f,
+) : Layer
+
+/** A single glowing rectangle light source in the dark (vending machine, window). */
+data class LightBox(
+    val glow: Int,
+    val face: List<Int>,
+    val x: Float,
+    val y: Float,
+    val w: Float,
+    val h: Float,
+) : Layer
