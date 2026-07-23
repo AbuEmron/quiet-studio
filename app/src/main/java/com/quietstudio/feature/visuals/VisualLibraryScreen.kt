@@ -73,7 +73,7 @@ private enum class VisualTab(val label: String, val icon: ImageVector) {
     PACKS("My Packs", Icons.Rounded.Bookmark),
 }
 
-private data class CatalogItem(val name: String, val category: String, val visual: VisualConfig)
+internal data class CatalogItem(val name: String, val category: String, val visual: VisualConfig)
 
 /** Built-in procedural visual catalog + saved packs — panel 6 layout. */
 @Composable
@@ -144,6 +144,20 @@ fun VisualLibraryScreen(
                     (query.isBlank() || item.name.contains(query, true))
             }
         }
+
+        // Visible count so the full set is obviously present — reassures that
+        // e.g. all 40 scenery scenes are there, and confirms the filter.
+        Text(
+            text = when {
+                tab == VisualTab.PACKS -> "${items.size} saved ${if (items.size == 1) "pack" else "packs"}"
+                tab == VisualTab.SCENERY -> "${items.size} scenes" +
+                    if (category == "All") "" else " · $category"
+                else -> "${items.size} ${tab.label.lowercase()}"
+            },
+            style = MaterialTheme.typography.labelMedium,
+            color = TextSecondary,
+            modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp),
+        )
 
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
@@ -289,7 +303,7 @@ private fun PackCard(pack: VisualPack, onDelete: () -> Unit) {
     }
 }
 
-private fun buildCatalog(): List<CatalogItem> {
+internal fun buildCatalog(): List<CatalogItem> {
     val names = listOf(
         "Dusk" to "Warm", "Midnight" to "Dark", "Deep Sea" to "Cool", "Amber" to "Warm",
         "Slate" to "Cool", "Wine" to "Dark", "Forest" to "Nature", "Gold Hour" to "Warm",
