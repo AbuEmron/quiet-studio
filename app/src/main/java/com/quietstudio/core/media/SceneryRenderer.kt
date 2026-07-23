@@ -7,6 +7,8 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RadialGradient
 import android.graphics.Shader
+import com.quietstudio.core.media.scenes.SceneCatalog
+import com.quietstudio.core.media.scenes.SpecSceneRenderer
 import com.quietstudio.core.model.VisualConfig
 import kotlin.math.PI
 import kotlin.math.max
@@ -100,9 +102,17 @@ class SceneryRenderer(private val width: Int, private val height: Int) {
         )
     }
 
+    /** Spec-driven scenes (wave 1+). Legacy themes below render unchanged. */
+    private val specRenderer = SpecSceneRenderer(width, height)
+
     fun draw(canvas: Canvas, config: VisualConfig, timeMs: Long, durationMs: Long) {
         val theme = if (config.sceneryTheme == "AUTO") "DUSK" else config.sceneryTheme
         val seed = if (config.scenerySeed != 0L) config.scenerySeed else 77L
+
+        SceneCatalog.byId(theme)?.let { spec ->
+            specRenderer.draw(canvas, spec, seed, config.motionIntensity, timeMs, durationMs)
+            return
+        }
         val p = palette(theme)
         val dur = durationMs.coerceAtLeast(1000)
         loopT = dur / 1000f

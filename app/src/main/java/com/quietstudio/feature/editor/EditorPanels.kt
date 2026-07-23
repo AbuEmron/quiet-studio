@@ -67,6 +67,7 @@ import com.quietstudio.core.model.Codec
 import com.quietstudio.core.model.MotionEffect
 import com.quietstudio.core.model.ProjectContent
 import com.quietstudio.core.model.Resolution
+import com.quietstudio.core.media.scenes.SceneCatalog
 import com.quietstudio.core.model.SceneryThemes
 import com.quietstudio.core.model.SubtitleAnimation
 import com.quietstudio.core.model.SubtitleCue
@@ -427,7 +428,14 @@ fun VisualSheet(content: ProjectContent, vm: EditorViewModel, onClose: () -> Uni
                     contentPadding = PaddingValues(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    items(listOf(SceneryThemes.AUTO) + SceneryThemes.ALL) { theme ->
+                    // AUTO + the authored catalog; a legacy theme from an older
+                    // project stays selectable while it's the current choice.
+                    val sceneIds = buildList {
+                        add(SceneryThemes.AUTO)
+                        addAll(SceneCatalog.ALL.map { it.id })
+                        if (v.sceneryTheme in SceneryThemes.ALL) add(v.sceneryTheme)
+                    }
+                    items(sceneIds) { theme ->
                         val selected = v.sceneryTheme == theme
                         Box(
                             Modifier
@@ -450,7 +458,8 @@ fun VisualSheet(content: ProjectContent, vm: EditorViewModel, onClose: () -> Uni
                                     "NIGHT" -> "Firefly night"
                                     "RAIN" -> "Gentle rain"
                                     "COAST" -> "Quiet coast"
-                                    else -> "First snow"
+                                    "SNOW" -> "First snow"
+                                    else -> SceneCatalog.byId(theme)?.name ?: theme
                                 },
                                 style = MaterialTheme.typography.labelMedium,
                                 color = if (selected) Color.White else TextSecondary,

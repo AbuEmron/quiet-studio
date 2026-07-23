@@ -46,6 +46,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
+import com.quietstudio.core.media.scenes.SceneCatalog
+import com.quietstudio.core.media.scenes.SceneGroup
 import com.quietstudio.core.model.BackgroundKind
 import com.quietstudio.core.model.MotionEffect
 import com.quietstudio.core.model.SubtitleStyle
@@ -83,7 +87,9 @@ fun VisualLibraryScreen(
     var saveCandidate by remember { mutableStateOf<CatalogItem?>(null) }
 
     val catalog = remember { buildCatalog() }
-    val categories = listOf("All", "Warm", "Cool", "Dark", "Nature")
+    val categories = remember {
+        listOf("All") + SceneGroup.entries.map { it.label } + listOf("Warm", "Cool", "Dark", "Nature")
+    }
 
     Column(
         Modifier
@@ -101,6 +107,7 @@ fun VisualLibraryScreen(
         Row(
             Modifier
                 .fillMaxWidth()
+                .horizontalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp, vertical = 10.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
@@ -321,19 +328,13 @@ private fun buildCatalog(): List<CatalogItem> {
             particleColorArgb = 0xFF9D7DFF, particleDensity = 0.5f, vignette = 0.4f,
         )),
     )
-    val scenery = listOf(
-        Triple("Sunrise Meadow", "Nature", "MEADOW"),
-        Triple("Golden Dusk", "Warm", "DUSK"),
-        Triple("Firefly Night", "Dark", "NIGHT"),
-        Triple("Gentle Rain", "Cool", "RAIN"),
-        Triple("Quiet Coast", "Nature", "COAST"),
-        Triple("First Snow", "Cool", "SNOW"),
-    ).mapIndexed { i, (name, cat, theme) ->
+    // The authored scene library — grows wave by wave in SceneCatalog.
+    val scenery = SceneCatalog.ALL.mapIndexed { i, spec ->
         CatalogItem(
-            name, cat,
+            spec.name, spec.group.label,
             VisualConfig(
                 kind = BackgroundKind.SCENERY.name,
-                sceneryTheme = theme,
+                sceneryTheme = spec.id,
                 scenerySeed = 1000L + i * 37,
                 filmGrain = 0.18f, vignette = 0.3f,
             ),
