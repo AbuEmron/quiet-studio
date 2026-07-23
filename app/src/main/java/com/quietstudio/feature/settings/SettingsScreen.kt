@@ -62,37 +62,71 @@ fun SettingsScreen(
                         modifier = Modifier.size(20.dp),
                     )
                     Text(
-                        if (ui.modelInstalled) "  Whisper model installed — subtitles generate on-device"
+                        if (ui.modelInstalled) "  Speech model ready — subtitles generate on-device"
                         else "  No speech model yet",
                         style = MaterialTheme.typography.bodyMedium,
                     )
                 }
                 Text(
-                    "Everything runs locally. The model file is the only thing Quiet Studio " +
-                        "ever needs from outside — import one you already have, or fetch it once.",
+                    "Everything runs locally, with word-level timing. The model file is the " +
+                        "only thing Quiet Studio ever needs from outside — import one you " +
+                        "already have, or fetch one once.",
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(vertical = 10.dp),
                 )
-                Row {
-                    OutlinedButton(onClick = { modelPicker.launch(arrayOf("*/*")) }) {
-                        Icon(Icons.Rounded.FolderOpen, null, Modifier.size(16.dp))
-                        Text("  Import file")
-                    }
-                    Text("  ")
-                    OutlinedButton(
-                        onClick = viewModel::downloadModel,
-                        enabled = ui.downloadProgress == null,
+
+                ui.rows.forEach { row ->
+                    Row(
+                        Modifier.fillMaxWidth().padding(vertical = 6.dp),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        if (ui.downloadProgress != null) {
-                            CircularProgressIndicator(Modifier.size(14.dp), strokeWidth = 2.dp)
-                            Text("  ${(ui.downloadProgress!! * 100).toInt()}%")
-                        } else {
-                            Icon(Icons.Rounded.Download, null, Modifier.size(16.dp))
-                            Text("  Download (~150 MB)")
+                        Column(Modifier.weight(1f)) {
+                            Text(
+                                row.label + if (row.recommended) "  ·  Recommended" else "",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = if (row.recommended) Highlight
+                                else MaterialTheme.colorScheme.onSurface,
+                            )
+                            Text(
+                                row.note,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                        when {
+                            row.active -> Text(
+                                "Active",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = Highlight,
+                            )
+                            row.installed -> OutlinedButton(onClick = { viewModel.useModel(row.fileName) }) {
+                                Text("Use")
+                            }
+                            row.spec != null -> OutlinedButton(
+                                onClick = { viewModel.download(row.spec) },
+                                enabled = ui.downloadingFile == null,
+                            ) {
+                                if (ui.downloadingFile == row.fileName && ui.downloadProgress != null) {
+                                    CircularProgressIndicator(Modifier.size(14.dp), strokeWidth = 2.dp)
+                                    Text("  ${(ui.downloadProgress!! * 100).toInt()}%")
+                                } else {
+                                    Icon(Icons.Rounded.Download, null, Modifier.size(16.dp))
+                                    Text("  ~${row.approxSizeMb} MB")
+                                }
+                            }
                         }
                     }
                 }
+
+                OutlinedButton(
+                    onClick = { modelPicker.launch(arrayOf("*/*")) },
+                    modifier = Modifier.padding(top = 4.dp),
+                ) {
+                    Icon(Icons.Rounded.FolderOpen, null, Modifier.size(16.dp))
+                    Text("  Import a model file (offline)")
+                }
+
                 ui.error?.let {
                     Text(
                         it, color = MaterialTheme.colorScheme.error,
@@ -123,7 +157,7 @@ fun SettingsScreen(
 
         SectionLabel("About")
         Text(
-            "Quiet Studio 1.2 — a private production room for one creator.",
+            "Quiet Studio 1.3 — a private production room for one creator.",
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp),

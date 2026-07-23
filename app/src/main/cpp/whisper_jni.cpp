@@ -53,7 +53,14 @@ Java_com_quietstudio_transcription_whisper_WhisperBridge_transcribe(
     params.print_special = false;
     params.no_context = true;
     params.suppress_blank = true;
-    params.token_timestamps = false;
+    // Word-level timing: with token timestamps on and max_len=1 split on word
+    // boundaries, whisper emits one segment per WORD with tight t0/t1. The
+    // output format below is unchanged — each line simply carries one word —
+    // so the Kotlin side needs no JNI change, and CueSegmenter groups words
+    // into caption-sized cues using their exact boundaries.
+    params.token_timestamps = true;
+    params.max_len = 1;
+    params.split_on_word = true;
 
     int rc = whisper_full(ctx, params, samples.data(), (int) samples.size());
     env->ReleaseStringUTFChars(language, lang);
