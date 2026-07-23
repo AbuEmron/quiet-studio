@@ -48,7 +48,21 @@ data class SubtitleStyle(
 
 /* ------------------------------- visuals -------------------------------- */
 
-enum class BackgroundKind { SOLID, GRADIENT, IMAGE, VIDEO, PARTICLES, MOTION }
+enum class BackgroundKind { SOLID, GRADIENT, IMAGE, VIDEO, PARTICLES, MOTION, SCENERY }
+
+/** Animated scenery themes. AUTO picks a theme matching the music's mood. */
+object SceneryThemes {
+    const val AUTO = "AUTO"
+    val ALL = listOf("MEADOW", "DUSK", "NIGHT", "RAIN", "COAST", "SNOW")
+
+    fun forMood(mood: String?): String = when (mood) {
+        "Morning Energy", "Hopeful", "Uplifting", "Inspirational" -> "MEADOW"
+        "Late Night", "Deep Thinking" -> "NIGHT"
+        "Deep Focus", "Creative" -> "RAIN"
+        "Calm", "Peaceful", "Documentary" -> "COAST"
+        else -> "DUSK"
+    }
+}
 
 enum class MotionEffect { NONE, SLOW_ZOOM, KEN_BURNS, PARALLAX, DRIFT }
 
@@ -66,7 +80,19 @@ data class VisualConfig(
     val motionIntensity: Float = 0.5f,
     val filmGrain: Float = 0.25f,
     val vignette: Float = 0.35f,
-)
+    /** SCENERY kind: theme name or AUTO (match music mood). */
+    val sceneryTheme: String = SceneryThemes.AUTO,
+    /** SCENERY kind: 0 = derive per project, so each video gets its own scene. */
+    val scenerySeed: Long = 0,
+) {
+    /** Resolves AUTO theme + per-project seed at render time. */
+    fun resolvedScenery(musicMood: String?, projectSeed: Long): VisualConfig {
+        if (kind != BackgroundKind.SCENERY.name) return this
+        val theme = if (sceneryTheme == SceneryThemes.AUTO) SceneryThemes.forMood(musicMood) else sceneryTheme
+        val seed = if (scenerySeed != 0L) scenerySeed else (projectSeed.takeIf { it != 0L } ?: 77L)
+        return copy(sceneryTheme = theme, scenerySeed = seed)
+    }
+}
 
 /** A saved, reusable look (background + subtitle style), aka "visual pack". */
 @Serializable

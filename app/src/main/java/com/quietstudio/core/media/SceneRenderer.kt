@@ -34,6 +34,7 @@ class SceneRenderer(
     private var grainFrames: List<Bitmap>? = null
     private var sourceBitmap: Bitmap? = null
     private var sourceBitmapUri: String? = null
+    private val scenery = SceneryRenderer(width, height)
 
     /** Optional decoded background image (for IMAGE kind). */
     fun setSourceBitmap(uri: String?, bitmap: Bitmap?) {
@@ -51,6 +52,7 @@ class SceneRenderer(
             BackgroundKind.VIDEO -> Unit // video frames come from the decoder underneath
             BackgroundKind.PARTICLES -> { drawGradient(canvas, config, t * 0.4f); drawParticles(canvas, config, t) }
             BackgroundKind.MOTION -> drawMotion(canvas, config, t)
+            BackgroundKind.SCENERY -> scenery.draw(canvas, config, timeMs, durationMs)
         }
         if (config.filmGrain > 0.01f) drawGrain(canvas, config.filmGrain, timeMs)
         if (config.vignette > 0.01f) drawVignette(canvas, config.vignette)

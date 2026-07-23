@@ -140,6 +140,13 @@ fun EditorScreen(
                         .padding(horizontal = 14.dp),
                 ) {
                     /* ------------------------- preview -------------------------- */
+                    val previewContent = c.copy(
+                        visual = c.visual.resolvedScenery(
+                            musicMood = viewModel.musicLibrary.byId(c.music.trackId)?.mood,
+                            projectSeed = (c.narration.wavPath ?: viewModel.projectId)
+                                .hashCode().toLong(),
+                        ),
+                    )
                     Box(
                         Modifier
                             .weight(1f)
@@ -148,7 +155,7 @@ fun EditorScreen(
                             .clip(RoundedCornerShape(16.dp)),
                     ) {
                         PreviewSurface(
-                            content = c,
+                            content = previewContent,
                             positionMs = ui.positionMs,
                             durationMs = ui.durationMs,
                             modifier = Modifier

@@ -74,6 +74,16 @@ class Media3ExportEngine @Inject constructor() : MediaEngine {
             val narrationPath = project.narration.wavPath
                 ?: return@withContext Result.failure(IllegalStateException("No narration recorded"))
 
+            // Resolve AUTO scenery to the music's mood + a per-project seed so
+            // every video gets its own original animated scene.
+            @Suppress("NAME_SHADOWING")
+            val project = project.copy(
+                visual = project.visual.resolvedScenery(
+                    musicMood = musicTrack?.mood,
+                    projectSeed = narrationPath.hashCode().toLong(),
+                ),
+            )
+
             // ---- 1. offline audio mixdown (0..15% of progress)
             onProgress(0.02f)
             val mixWav = File(context.cacheDir, "mix_${System.currentTimeMillis()}.wav")

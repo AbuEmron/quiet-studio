@@ -67,6 +67,7 @@ import com.quietstudio.core.model.Codec
 import com.quietstudio.core.model.MotionEffect
 import com.quietstudio.core.model.ProjectContent
 import com.quietstudio.core.model.Resolution
+import com.quietstudio.core.model.SceneryThemes
 import com.quietstudio.core.model.SubtitleAnimation
 import com.quietstudio.core.model.SubtitleCue
 import com.quietstudio.core.model.SubtitlePosition
@@ -349,6 +350,7 @@ fun VisualSheet(content: ProjectContent, vm: EditorViewModel, onClose: () -> Uni
             ) {
                 items(
                     listOf(
+                        BackgroundKind.SCENERY.name to "Scenery",
                         BackgroundKind.GRADIENT.name to "Gradient",
                         BackgroundKind.MOTION.name to "Motion",
                         BackgroundKind.PARTICLES.name to "Particles",
@@ -383,6 +385,53 @@ fun VisualSheet(content: ProjectContent, vm: EditorViewModel, onClose: () -> Uni
                         )
                     }
                 }
+            }
+        }
+        if (v.kind == BackgroundKind.SCENERY.name) {
+            item {
+                SettingLabel("Scene")
+                LazyRow(
+                    contentPadding = PaddingValues(horizontal = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    items(listOf(SceneryThemes.AUTO) + SceneryThemes.ALL) { theme ->
+                        val selected = v.sceneryTheme == theme
+                        Box(
+                            Modifier
+                                .background(
+                                    if (selected) Violet.copy(alpha = 0.18f) else CardHigh,
+                                    RoundedCornerShape(12.dp),
+                                )
+                                .then(
+                                    if (selected) Modifier.border(1.dp, Violet, RoundedCornerShape(12.dp))
+                                    else Modifier
+                                )
+                                .clickable { vm.updateVisual(v.copy(sceneryTheme = theme)) }
+                                .padding(horizontal = 13.dp, vertical = 9.dp),
+                        ) {
+                            Text(
+                                when (theme) {
+                                    SceneryThemes.AUTO -> "Match music"
+                                    "MEADOW" -> "Sunrise meadow"
+                                    "DUSK" -> "Golden dusk"
+                                    "NIGHT" -> "Firefly night"
+                                    "RAIN" -> "Gentle rain"
+                                    "COAST" -> "Quiet coast"
+                                    else -> "First snow"
+                                },
+                                style = MaterialTheme.typography.labelMedium,
+                                color = if (selected) Color.White else TextSecondary,
+                            )
+                        }
+                    }
+                }
+                Text(
+                    "Every project grows its own scene — same theme, different hills, " +
+                        "clouds and light each time.",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = TextSecondary,
+                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 6.dp),
+                )
             }
         }
         item {

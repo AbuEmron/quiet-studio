@@ -24,6 +24,7 @@ import androidx.compose.material.icons.rounded.Bookmark
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Gradient
 import androidx.compose.material.icons.rounded.Grain
+import androidx.compose.material.icons.rounded.Landscape
 import androidx.compose.material.icons.rounded.Waves
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
@@ -60,6 +61,7 @@ import com.quietstudio.ui.theme.VioletSoft
 import java.util.UUID
 
 private enum class VisualTab(val label: String, val icon: ImageVector) {
+    SCENERY("Scenery", Icons.Rounded.Landscape),
     GRADIENTS("Gradients", Icons.Rounded.Gradient),
     MOTION("Motion", Icons.Rounded.Waves),
     PARTICLES("Particles", Icons.Rounded.Grain),
@@ -77,7 +79,7 @@ fun VisualLibraryScreen(
     val packs by viewModel.packs.collectAsStateWithLifecycle()
     var query by remember { mutableStateOf("") }
     var category by remember { mutableStateOf("All") }
-    var tab by remember { mutableStateOf(VisualTab.GRADIENTS) }
+    var tab by remember { mutableStateOf(VisualTab.SCENERY) }
     var saveCandidate by remember { mutableStateOf<CatalogItem?>(null) }
 
     val catalog = remember { buildCatalog() }
@@ -125,6 +127,7 @@ fun VisualLibraryScreen(
             VisualTab.PACKS -> packs
             else -> catalog.filter { item ->
                 item.visual.kind == when (tab) {
+                    VisualTab.SCENERY -> BackgroundKind.SCENERY.name
                     VisualTab.GRADIENTS -> BackgroundKind.GRADIENT.name
                     VisualTab.MOTION -> BackgroundKind.MOTION.name
                     else -> BackgroundKind.PARTICLES.name
@@ -318,5 +321,23 @@ private fun buildCatalog(): List<CatalogItem> {
             particleColorArgb = 0xFF9D7DFF, particleDensity = 0.5f, vignette = 0.4f,
         )),
     )
-    return gradients + motion + particles
+    val scenery = listOf(
+        Triple("Sunrise Meadow", "Nature", "MEADOW"),
+        Triple("Golden Dusk", "Warm", "DUSK"),
+        Triple("Firefly Night", "Dark", "NIGHT"),
+        Triple("Gentle Rain", "Cool", "RAIN"),
+        Triple("Quiet Coast", "Nature", "COAST"),
+        Triple("First Snow", "Cool", "SNOW"),
+    ).mapIndexed { i, (name, cat, theme) ->
+        CatalogItem(
+            name, cat,
+            VisualConfig(
+                kind = BackgroundKind.SCENERY.name,
+                sceneryTheme = theme,
+                scenerySeed = 1000L + i * 37,
+                filmGrain = 0.18f, vignette = 0.3f,
+            ),
+        )
+    }
+    return scenery + gradients + motion + particles
 }
