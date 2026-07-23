@@ -1,0 +1,1205 @@
+{
+  "version": 1,
+  "tracks": [
+    {
+      "id": "qf-01",
+      "title": "Wandering Streetlight",
+      "mood": "Warm Lo-fi",
+      "tags": [
+        "lofi",
+        "warm",
+        "boombap",
+        "chill"
+      ],
+      "bpm": 71,
+      "key": "E minor",
+      "energy": 2,
+      "durationSec": 67.6,
+      "file": "music/track_01.mp3",
+      "loop": true,
+      "instruments": [
+        "warm lo-fi boom-bap"
+      ]
+    },
+    {
+      "id": "qf-02",
+      "title": "Blue Tatami",
+      "mood": "Rainy Lo-fi",
+      "tags": [
+        "lofi",
+        "rainy",
+        "moody",
+        "chill"
+      ],
+      "bpm": 84,
+      "key": "Bb minor",
+      "energy": 3,
+      "durationSec": 68.6,
+      "file": "music/track_02.mp3",
+      "loop": true,
+      "instruments": [
+        "moody rainy lo-fi"
+      ]
+    },
+    {
+      "id": "qf-03",
+      "title": "Velvet Freeway",
+      "mood": "Funk / Space-disco",
+      "tags": [
+        "funk",
+        "disco",
+        "space",
+        "groove"
+      ],
+      "bpm": 115,
+      "key": "C minor",
+      "energy": 4,
+      "durationSec": 58.4,
+      "file": "music/track_03.mp3",
+      "loop": true,
+      "instruments": [
+        "funk / space-disco"
+      ]
+    },
+    {
+      "id": "qf-04",
+      "title": "Cosmic Courtyard",
+      "mood": "Jazz Trio",
+      "tags": [
+        "jazz",
+        "trio",
+        "bebop",
+        "swing"
+      ],
+      "bpm": 142,
+      "key": "F",
+      "energy": 5,
+      "durationSec": 60.8,
+      "file": "music/track_04.mp3",
+      "loop": true,
+      "instruments": [
+        "jazz trio (bebop)"
+      ]
+    },
+    {
+      "id": "qf-05",
+      "title": "Blue Freeway",
+      "mood": "Warm Lo-fi",
+      "tags": [
+        "lofi",
+        "warm",
+        "boombap",
+        "chill"
+      ],
+      "bpm": 81,
+      "key": "A minor",
+      "energy": 3,
+      "durationSec": 71.1,
+      "file": "music/track_05.mp3",
+      "loop": true,
+      "instruments": [
+        "warm lo-fi boom-bap"
+      ]
+    },
+    {
+      "id": "qf-06",
+      "title": "Paper Vespa",
+      "mood": "Rainy Lo-fi",
+      "tags": [
+        "lofi",
+        "rainy",
+        "moody",
+        "chill"
+      ],
+      "bpm": 81,
+      "key": "D minor",
+      "energy": 3,
+      "durationSec": 71.1,
+      "file": "music/track_06.mp3",
+      "loop": true,
+      "instruments": [
+        "moody rainy lo-fi"
+      ]
+    },
+    {
+      "id": "qf-07",
+      "title": "Amber Skyline",
+      "mood": "Funk / Space-disco",
+      "tags": [
+        "funk",
+        "disco",
+        "space",
+        "groove"
+      ],
+      "bpm": 113,
+      "key": "F minor",
+      "energy": 4,
+      "durationSec": 59.5,
+      "file": "music/track_07.mp3",
+      "loop": true,
+      "instruments": [
+        "funk / space-disco"
+      ]
+    },
+    {
+      "id": "qf-08",
+      "title": "Starlit Courtyard",
+      "mood": "Jazz Trio",
+      "tags": [
+        "jazz",
+        "trio",
+        "bebop",
+        "swing"
+      ],
+      "bpm": 139,
+      "key": "B",
+      "energy": 5,
+      "durationSec": 55.3,
+      "file": "music/track_08.mp3",
+      "loop": true,
+      "instruments": [
+        "jazz trio (bebop)"
+      ]
+    },
+    {
+      "id": "qf-09",
+      "title": "Hazy Highway",
+      "mood": "Warm Lo-fi",
+      "tags": [
+        "lofi",
+        "warm",
+        "boombap",
+        "chill"
+      ],
+      "bpm": 72,
+      "key": "F minor",
+      "energy": 2,
+      "durationSec": 66.7,
+      "file": "music/track_09.mp3",
+      "loop": true,
+      "instruments": [
+        "warm lo-fi boom-bap"
+      ]
+    },
+    {
+      "id": "qf-10",
+      "title": "Hazy Horizon",
+      "mood": "Rainy Lo-fi",
+      "tags": [
+        "lofi",
+        "rainy",
+        "moody",
+        "chill"
+      ],
+      "bpm": 77,
+      "key": "Eb minor",
+      "energy": 3,
+      "durationSec": 62.3,
+      "file": "music/track_10.mp3",
+      "loop": true,
+      "instruments": [
+        "moody rainy lo-fi"
+      ]
+    },
+    {
+      "id": "qf-11",
+      "title": "Pale Doorway",
+      "mood": "Funk / Space-disco",
+      "tags": [
+        "funk",
+        "disco",
+        "space",
+        "groove"
+      ],
+      "bpm": 117,
+      "key": "E minor",
+      "energy": 4,
+      "durationSec": 65.6,
+      "file": "music/track_11.mp3",
+      "loop": true,
+      "instruments": [
+        "funk / space-disco"
+      ]
+    },
+    {
+      "id": "qf-12",
+      "title": "Paper Lantern",
+      "mood": "Jazz Trio",
+      "tags": [
+        "jazz",
+        "trio",
+        "bebop",
+        "swing"
+      ],
+      "bpm": 129,
+      "key": "C",
+      "energy": 5,
+      "durationSec": 59.5,
+      "file": "music/track_12.mp3",
+      "loop": true,
+      "instruments": [
+        "jazz trio (bebop)"
+      ]
+    },
+    {
+      "id": "qf-13",
+      "title": "Rainy Freeway",
+      "mood": "Warm Lo-fi",
+      "tags": [
+        "lofi",
+        "warm",
+        "boombap",
+        "chill"
+      ],
+      "bpm": 77,
+      "key": "A minor",
+      "energy": 3,
+      "durationSec": 62.3,
+      "file": "music/track_13.mp3",
+      "loop": true,
+      "instruments": [
+        "warm lo-fi boom-bap"
+      ]
+    },
+    {
+      "id": "qf-14",
+      "title": "Electric Doorway",
+      "mood": "Rainy Lo-fi",
+      "tags": [
+        "lofi",
+        "rainy",
+        "moody",
+        "chill"
+      ],
+      "bpm": 79,
+      "key": "C minor",
+      "energy": 3,
+      "durationSec": 72.9,
+      "file": "music/track_14.mp3",
+      "loop": true,
+      "instruments": [
+        "moody rainy lo-fi"
+      ]
+    },
+    {
+      "id": "qf-15",
+      "title": "Blue Skyline",
+      "mood": "Funk / Space-disco",
+      "tags": [
+        "funk",
+        "disco",
+        "space",
+        "groove"
+      ],
+      "bpm": 114,
+      "key": "E minor",
+      "energy": 4,
+      "durationSec": 67.4,
+      "file": "music/track_15.mp3",
+      "loop": true,
+      "instruments": [
+        "funk / space-disco"
+      ]
+    },
+    {
+      "id": "qf-16",
+      "title": "Dusty Platform",
+      "mood": "Jazz Trio",
+      "tags": [
+        "jazz",
+        "trio",
+        "bebop",
+        "swing"
+      ],
+      "bpm": 139,
+      "key": "G",
+      "energy": 5,
+      "durationSec": 69.1,
+      "file": "music/track_16.mp3",
+      "loop": true,
+      "instruments": [
+        "jazz trio (bebop)"
+      ]
+    },
+    {
+      "id": "qf-17",
+      "title": "Gentle Willow",
+      "mood": "Warm Lo-fi",
+      "tags": [
+        "lofi",
+        "warm",
+        "boombap",
+        "chill"
+      ],
+      "bpm": 83,
+      "key": "D minor",
+      "energy": 3,
+      "durationSec": 69.4,
+      "file": "music/track_17.mp3",
+      "loop": true,
+      "instruments": [
+        "warm lo-fi boom-bap"
+      ]
+    },
+    {
+      "id": "qf-18",
+      "title": "Midnight Willow",
+      "mood": "Rainy Lo-fi",
+      "tags": [
+        "lofi",
+        "rainy",
+        "moody",
+        "chill"
+      ],
+      "bpm": 82,
+      "key": "A minor",
+      "energy": 3,
+      "durationSec": 70.2,
+      "file": "music/track_18.mp3",
+      "loop": true,
+      "instruments": [
+        "moody rainy lo-fi"
+      ]
+    },
+    {
+      "id": "qf-19",
+      "title": "Velvet Static",
+      "mood": "Funk / Space-disco",
+      "tags": [
+        "funk",
+        "disco",
+        "space",
+        "groove"
+      ],
+      "bpm": 108,
+      "key": "C minor",
+      "energy": 4,
+      "durationSec": 62.2,
+      "file": "music/track_19.mp3",
+      "loop": true,
+      "instruments": [
+        "funk / space-disco"
+      ]
+    },
+    {
+      "id": "qf-20",
+      "title": "Second Willow",
+      "mood": "Jazz Trio",
+      "tags": [
+        "jazz",
+        "trio",
+        "bebop",
+        "swing"
+      ],
+      "bpm": 126,
+      "key": "G",
+      "energy": 5,
+      "durationSec": 53.3,
+      "file": "music/track_20.mp3",
+      "loop": true,
+      "instruments": [
+        "jazz trio (bebop)"
+      ]
+    },
+    {
+      "id": "qf-21",
+      "title": "Warm Lantern",
+      "mood": "Warm Lo-fi",
+      "tags": [
+        "lofi",
+        "warm",
+        "boombap",
+        "chill"
+      ],
+      "bpm": 80,
+      "key": "A major",
+      "energy": 3,
+      "durationSec": 72,
+      "file": "music/track_21.mp3",
+      "loop": true,
+      "instruments": [
+        "warm lo-fi boom-bap"
+      ]
+    },
+    {
+      "id": "qf-22",
+      "title": "Blue Nebula",
+      "mood": "Rainy Lo-fi",
+      "tags": [
+        "lofi",
+        "rainy",
+        "moody",
+        "chill"
+      ],
+      "bpm": 76,
+      "key": "F minor",
+      "energy": 3,
+      "durationSec": 63.2,
+      "file": "music/track_22.mp3",
+      "loop": true,
+      "instruments": [
+        "moody rainy lo-fi"
+      ]
+    },
+    {
+      "id": "qf-23",
+      "title": "Warm Tatami",
+      "mood": "Funk / Space-disco",
+      "tags": [
+        "funk",
+        "disco",
+        "space",
+        "groove"
+      ],
+      "bpm": 106,
+      "key": "C minor",
+      "energy": 4,
+      "durationSec": 54.3,
+      "file": "music/track_23.mp3",
+      "loop": true,
+      "instruments": [
+        "funk / space-disco"
+      ]
+    },
+    {
+      "id": "qf-24",
+      "title": "Golden Skyline",
+      "mood": "Jazz Trio",
+      "tags": [
+        "jazz",
+        "trio",
+        "bebop",
+        "swing"
+      ],
+      "bpm": 132,
+      "key": "D",
+      "energy": 5,
+      "durationSec": 58.2,
+      "file": "music/track_24.mp3",
+      "loop": true,
+      "instruments": [
+        "jazz trio (bebop)"
+      ]
+    },
+    {
+      "id": "qf-25",
+      "title": "Low Freeway",
+      "mood": "Warm Lo-fi",
+      "tags": [
+        "lofi",
+        "warm",
+        "boombap",
+        "chill"
+      ],
+      "bpm": 72,
+      "key": "C major",
+      "energy": 2,
+      "durationSec": 66.7,
+      "file": "music/track_25.mp3",
+      "loop": true,
+      "instruments": [
+        "warm lo-fi boom-bap"
+      ]
+    },
+    {
+      "id": "qf-26",
+      "title": "Amber Harbor",
+      "mood": "Rainy Lo-fi",
+      "tags": [
+        "lofi",
+        "rainy",
+        "moody",
+        "chill"
+      ],
+      "bpm": 80,
+      "key": "D minor",
+      "energy": 3,
+      "durationSec": 72,
+      "file": "music/track_26.mp3",
+      "loop": true,
+      "instruments": [
+        "moody rainy lo-fi"
+      ]
+    },
+    {
+      "id": "qf-27",
+      "title": "Distant Lantern",
+      "mood": "Funk / Space-disco",
+      "tags": [
+        "funk",
+        "disco",
+        "space",
+        "groove"
+      ],
+      "bpm": 112,
+      "key": "E minor",
+      "energy": 4,
+      "durationSec": 60,
+      "file": "music/track_27.mp3",
+      "loop": true,
+      "instruments": [
+        "funk / space-disco"
+      ]
+    },
+    {
+      "id": "qf-28",
+      "title": "Lonesome Teahouse",
+      "mood": "Jazz Trio",
+      "tags": [
+        "jazz",
+        "trio",
+        "bebop",
+        "swing"
+      ],
+      "bpm": 132,
+      "key": "G",
+      "energy": 5,
+      "durationSec": 65.5,
+      "file": "music/track_28.mp3",
+      "loop": true,
+      "instruments": [
+        "jazz trio (bebop)"
+      ]
+    },
+    {
+      "id": "qf-29",
+      "title": "Paper Monsoon",
+      "mood": "Warm Lo-fi",
+      "tags": [
+        "lofi",
+        "warm",
+        "boombap",
+        "chill"
+      ],
+      "bpm": 77,
+      "key": "F minor",
+      "energy": 3,
+      "durationSec": 74.8,
+      "file": "music/track_29.mp3",
+      "loop": true,
+      "instruments": [
+        "warm lo-fi boom-bap"
+      ]
+    },
+    {
+      "id": "qf-30",
+      "title": "Amber Cassette",
+      "mood": "Rainy Lo-fi",
+      "tags": [
+        "lofi",
+        "rainy",
+        "moody",
+        "chill"
+      ],
+      "bpm": 83,
+      "key": "Bb minor",
+      "energy": 3,
+      "durationSec": 69.4,
+      "file": "music/track_30.mp3",
+      "loop": true,
+      "instruments": [
+        "moody rainy lo-fi"
+      ]
+    },
+    {
+      "id": "qf-31",
+      "title": "Gentle Drizzle",
+      "mood": "Funk / Space-disco",
+      "tags": [
+        "funk",
+        "disco",
+        "space",
+        "groove"
+      ],
+      "bpm": 113,
+      "key": "D minor",
+      "energy": 4,
+      "durationSec": 59.5,
+      "file": "music/track_31.mp3",
+      "loop": true,
+      "instruments": [
+        "funk / space-disco"
+      ]
+    },
+    {
+      "id": "qf-32",
+      "title": "Warm Diner",
+      "mood": "Jazz Trio",
+      "tags": [
+        "jazz",
+        "trio",
+        "bebop",
+        "swing"
+      ],
+      "bpm": 136,
+      "key": "D",
+      "energy": 5,
+      "durationSec": 56.5,
+      "file": "music/track_32.mp3",
+      "loop": true,
+      "instruments": [
+        "jazz trio (bebop)"
+      ]
+    },
+    {
+      "id": "qf-33",
+      "title": "Pale Platform",
+      "mood": "Warm Lo-fi",
+      "tags": [
+        "lofi",
+        "warm",
+        "boombap",
+        "chill"
+      ],
+      "bpm": 84,
+      "key": "C minor",
+      "energy": 3,
+      "durationSec": 68.6,
+      "file": "music/track_33.mp3",
+      "loop": true,
+      "instruments": [
+        "warm lo-fi boom-bap"
+      ]
+    },
+    {
+      "id": "qf-34",
+      "title": "Dusty Skyline",
+      "mood": "Rainy Lo-fi",
+      "tags": [
+        "lofi",
+        "rainy",
+        "moody",
+        "chill"
+      ],
+      "bpm": 87,
+      "key": "F minor",
+      "energy": 3,
+      "durationSec": 77.2,
+      "file": "music/track_34.mp3",
+      "loop": true,
+      "instruments": [
+        "moody rainy lo-fi"
+      ]
+    },
+    {
+      "id": "qf-35",
+      "title": "Hazy Cruiser",
+      "mood": "Funk / Space-disco",
+      "tags": [
+        "funk",
+        "disco",
+        "space",
+        "groove"
+      ],
+      "bpm": 106,
+      "key": "D minor",
+      "energy": 4,
+      "durationSec": 54.3,
+      "file": "music/track_35.mp3",
+      "loop": true,
+      "instruments": [
+        "funk / space-disco"
+      ]
+    },
+    {
+      "id": "qf-36",
+      "title": "Wandering Harbor",
+      "mood": "Jazz Trio",
+      "tags": [
+        "jazz",
+        "trio",
+        "bebop",
+        "swing"
+      ],
+      "bpm": 128,
+      "key": "F",
+      "energy": 5,
+      "durationSec": 67.5,
+      "file": "music/track_36.mp3",
+      "loop": true,
+      "instruments": [
+        "jazz trio (bebop)"
+      ]
+    },
+    {
+      "id": "qf-37",
+      "title": "Paper Comet",
+      "mood": "Warm Lo-fi",
+      "tags": [
+        "lofi",
+        "warm",
+        "boombap",
+        "chill"
+      ],
+      "bpm": 80,
+      "key": "G major",
+      "energy": 3,
+      "durationSec": 60,
+      "file": "music/track_37.mp3",
+      "loop": true,
+      "instruments": [
+        "warm lo-fi boom-bap"
+      ]
+    },
+    {
+      "id": "qf-38",
+      "title": "Golden Freeway",
+      "mood": "Rainy Lo-fi",
+      "tags": [
+        "lofi",
+        "rainy",
+        "moody",
+        "chill"
+      ],
+      "bpm": 83,
+      "key": "C minor",
+      "energy": 3,
+      "durationSec": 69.4,
+      "file": "music/track_38.mp3",
+      "loop": true,
+      "instruments": [
+        "moody rainy lo-fi"
+      ]
+    },
+    {
+      "id": "qf-39",
+      "title": "Silver Vespa",
+      "mood": "Funk / Space-disco",
+      "tags": [
+        "funk",
+        "disco",
+        "space",
+        "groove"
+      ],
+      "bpm": 115,
+      "key": "E minor",
+      "energy": 4,
+      "durationSec": 58.4,
+      "file": "music/track_39.mp3",
+      "loop": true,
+      "instruments": [
+        "funk / space-disco"
+      ]
+    },
+    {
+      "id": "qf-40",
+      "title": "Gentle Meridian",
+      "mood": "Jazz Trio",
+      "tags": [
+        "jazz",
+        "trio",
+        "bebop",
+        "swing"
+      ],
+      "bpm": 129,
+      "key": "A",
+      "energy": 5,
+      "durationSec": 67,
+      "file": "music/track_40.mp3",
+      "loop": true,
+      "instruments": [
+        "jazz trio (bebop)"
+      ]
+    },
+    {
+      "id": "qf-41",
+      "title": "Restless Diner",
+      "mood": "Warm Lo-fi",
+      "tags": [
+        "lofi",
+        "warm",
+        "boombap",
+        "chill"
+      ],
+      "bpm": 84,
+      "key": "A major",
+      "energy": 3,
+      "durationSec": 68.6,
+      "file": "music/track_41.mp3",
+      "loop": true,
+      "instruments": [
+        "warm lo-fi boom-bap"
+      ]
+    },
+    {
+      "id": "qf-42",
+      "title": "Wandering Diner",
+      "mood": "Rainy Lo-fi",
+      "tags": [
+        "lofi",
+        "rainy",
+        "moody",
+        "chill"
+      ],
+      "bpm": 79,
+      "key": "D minor",
+      "energy": 3,
+      "durationSec": 60.8,
+      "file": "music/track_42.mp3",
+      "loop": true,
+      "instruments": [
+        "moody rainy lo-fi"
+      ]
+    },
+    {
+      "id": "qf-43",
+      "title": "Electric Willow",
+      "mood": "Funk / Space-disco",
+      "tags": [
+        "funk",
+        "disco",
+        "space",
+        "groove"
+      ],
+      "bpm": 118,
+      "key": "G minor",
+      "energy": 4,
+      "durationSec": 56.9,
+      "file": "music/track_43.mp3",
+      "loop": true,
+      "instruments": [
+        "funk / space-disco"
+      ]
+    },
+    {
+      "id": "qf-44",
+      "title": "Wandering Nebula",
+      "mood": "Jazz Trio",
+      "tags": [
+        "jazz",
+        "trio",
+        "bebop",
+        "swing"
+      ],
+      "bpm": 138,
+      "key": "D",
+      "energy": 5,
+      "durationSec": 62.6,
+      "file": "music/track_44.mp3",
+      "loop": true,
+      "instruments": [
+        "jazz trio (bebop)"
+      ]
+    },
+    {
+      "id": "qf-45",
+      "title": "Blue Rooftop",
+      "mood": "Warm Lo-fi",
+      "tags": [
+        "lofi",
+        "warm",
+        "boombap",
+        "chill"
+      ],
+      "bpm": 76,
+      "key": "A major",
+      "energy": 3,
+      "durationSec": 63.2,
+      "file": "music/track_45.mp3",
+      "loop": true,
+      "instruments": [
+        "warm lo-fi boom-bap"
+      ]
+    },
+    {
+      "id": "qf-46",
+      "title": "Gentle Tide",
+      "mood": "Rainy Lo-fi",
+      "tags": [
+        "lofi",
+        "rainy",
+        "moody",
+        "chill"
+      ],
+      "bpm": 80,
+      "key": "F minor",
+      "energy": 3,
+      "durationSec": 72,
+      "file": "music/track_46.mp3",
+      "loop": true,
+      "instruments": [
+        "moody rainy lo-fi"
+      ]
+    },
+    {
+      "id": "qf-47",
+      "title": "Velvet Vespa",
+      "mood": "Funk / Space-disco",
+      "tags": [
+        "funk",
+        "disco",
+        "space",
+        "groove"
+      ],
+      "bpm": 114,
+      "key": "F minor",
+      "energy": 4,
+      "durationSec": 58.9,
+      "file": "music/track_47.mp3",
+      "loop": true,
+      "instruments": [
+        "funk / space-disco"
+      ]
+    },
+    {
+      "id": "qf-48",
+      "title": "Hazy Doorway",
+      "mood": "Jazz Trio",
+      "tags": [
+        "jazz",
+        "trio",
+        "bebop",
+        "swing"
+      ],
+      "bpm": 131,
+      "key": "A",
+      "energy": 5,
+      "durationSec": 58.6,
+      "file": "music/track_48.mp3",
+      "loop": true,
+      "instruments": [
+        "jazz trio (bebop)"
+      ]
+    },
+    {
+      "id": "qf-49",
+      "title": "Hollow Orbit",
+      "mood": "Warm Lo-fi",
+      "tags": [
+        "lofi",
+        "warm",
+        "boombap",
+        "chill"
+      ],
+      "bpm": 84,
+      "key": "F minor",
+      "energy": 3,
+      "durationSec": 57.1,
+      "file": "music/track_49.mp3",
+      "loop": true,
+      "instruments": [
+        "warm lo-fi boom-bap"
+      ]
+    },
+    {
+      "id": "qf-50",
+      "title": "Warm Streetlight",
+      "mood": "Rainy Lo-fi",
+      "tags": [
+        "lofi",
+        "rainy",
+        "moody",
+        "chill"
+      ],
+      "bpm": 77,
+      "key": "D minor",
+      "energy": 3,
+      "durationSec": 62.3,
+      "file": "music/track_50.mp3",
+      "loop": true,
+      "instruments": [
+        "moody rainy lo-fi"
+      ]
+    },
+    {
+      "id": "qf-51",
+      "title": "Hazy Harbor",
+      "mood": "Funk / Space-disco",
+      "tags": [
+        "funk",
+        "disco",
+        "space",
+        "groove"
+      ],
+      "bpm": 115,
+      "key": "D minor",
+      "energy": 4,
+      "durationSec": 66.8,
+      "file": "music/track_51.mp3",
+      "loop": true,
+      "instruments": [
+        "funk / space-disco"
+      ]
+    },
+    {
+      "id": "qf-52",
+      "title": "Golden Tatami",
+      "mood": "Jazz Trio",
+      "tags": [
+        "jazz",
+        "trio",
+        "bebop",
+        "swing"
+      ],
+      "bpm": 140,
+      "key": "C",
+      "energy": 5,
+      "durationSec": 68.6,
+      "file": "music/track_52.mp3",
+      "loop": true,
+      "instruments": [
+        "jazz trio (bebop)"
+      ]
+    },
+    {
+      "id": "qf-53",
+      "title": "Slow Tatami",
+      "mood": "Warm Lo-fi",
+      "tags": [
+        "lofi",
+        "warm",
+        "boombap",
+        "chill"
+      ],
+      "bpm": 79,
+      "key": "D minor",
+      "energy": 3,
+      "durationSec": 72.9,
+      "file": "music/track_53.mp3",
+      "loop": true,
+      "instruments": [
+        "warm lo-fi boom-bap"
+      ]
+    },
+    {
+      "id": "qf-54",
+      "title": "Midnight Courtyard",
+      "mood": "Rainy Lo-fi",
+      "tags": [
+        "lofi",
+        "rainy",
+        "moody",
+        "chill"
+      ],
+      "bpm": 77,
+      "key": "F minor",
+      "energy": 3,
+      "durationSec": 74.8,
+      "file": "music/track_54.mp3",
+      "loop": true,
+      "instruments": [
+        "moody rainy lo-fi"
+      ]
+    },
+    {
+      "id": "qf-55",
+      "title": "Low Horizon",
+      "mood": "Funk / Space-disco",
+      "tags": [
+        "funk",
+        "disco",
+        "space",
+        "groove"
+      ],
+      "bpm": 108,
+      "key": "D minor",
+      "energy": 4,
+      "durationSec": 62.2,
+      "file": "music/track_55.mp3",
+      "loop": true,
+      "instruments": [
+        "funk / space-disco"
+      ]
+    },
+    {
+      "id": "qf-56",
+      "title": "Starlit Tatami",
+      "mood": "Jazz Trio",
+      "tags": [
+        "jazz",
+        "trio",
+        "bebop",
+        "swing"
+      ],
+      "bpm": 133,
+      "key": "F",
+      "energy": 5,
+      "durationSec": 65,
+      "file": "music/track_56.mp3",
+      "loop": true,
+      "instruments": [
+        "jazz trio (bebop)"
+      ]
+    },
+    {
+      "id": "qf-57",
+      "title": "Quiet Nebula",
+      "mood": "Warm Lo-fi",
+      "tags": [
+        "lofi",
+        "warm",
+        "boombap",
+        "chill"
+      ],
+      "bpm": 73,
+      "key": "A minor",
+      "energy": 2,
+      "durationSec": 65.8,
+      "file": "music/track_57.mp3",
+      "loop": true,
+      "instruments": [
+        "warm lo-fi boom-bap"
+      ]
+    },
+    {
+      "id": "qf-58",
+      "title": "Hollow Platform",
+      "mood": "Rainy Lo-fi",
+      "tags": [
+        "lofi",
+        "rainy",
+        "moody",
+        "chill"
+      ],
+      "bpm": 87,
+      "key": "Ab minor",
+      "energy": 3,
+      "durationSec": 77.2,
+      "file": "music/track_58.mp3",
+      "loop": true,
+      "instruments": [
+        "moody rainy lo-fi"
+      ]
+    },
+    {
+      "id": "qf-59",
+      "title": "Velvet Willow",
+      "mood": "Funk / Space-disco",
+      "tags": [
+        "funk",
+        "disco",
+        "space",
+        "groove"
+      ],
+      "bpm": 116,
+      "key": "D minor",
+      "energy": 4,
+      "durationSec": 57.9,
+      "file": "music/track_59.mp3",
+      "loop": true,
+      "instruments": [
+        "funk / space-disco"
+      ]
+    },
+    {
+      "id": "qf-60",
+      "title": "Hazy Tatami",
+      "mood": "Jazz Trio",
+      "tags": [
+        "jazz",
+        "trio",
+        "bebop",
+        "swing"
+      ],
+      "bpm": 137,
+      "key": "D",
+      "energy": 5,
+      "durationSec": 70.1,
+      "file": "music/track_60.mp3",
+      "loop": true,
+      "instruments": [
+        "jazz trio (bebop)"
+      ]
+    }
+  ]
+}

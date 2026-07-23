@@ -143,7 +143,9 @@ fun SettingsScreen(
                 listOf(
                     "No accounts, no analytics, no ads",
                     "Recordings, projects and exports never leave this device",
-                    "Bring your own music — imports are copied to this device and stay here",
+                    "60 bundled tracks composed by The Quiet Few Collective — original, " +
+                        "no samples, yours to use in your videos",
+                    "Bring your own music too — imports are copied to this device and stay here",
                     "Cloud sync will only ever exist as an explicit opt-in module",
                 ).forEach {
                     Text(
@@ -157,7 +159,7 @@ fun SettingsScreen(
 
         SectionLabel("About")
         Text(
-            "Quiet Studio 1.7 — a private production room for one creator.",
+            "Quiet Studio 1.8 — a private production room for one creator.",
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp),

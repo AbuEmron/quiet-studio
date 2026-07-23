@@ -154,6 +154,14 @@ fun MusicLibraryScreen(
             modifier = Modifier.padding(horizontal = 16.dp),
         )
 
+        Text(
+            "Original music composed by The Quiet Few Collective — no samples, " +
+                "free to use in your videos.",
+            style = MaterialTheme.typography.labelSmall,
+            color = TextSecondary,
+            modifier = Modifier.padding(horizontal = 20.dp, vertical = 6.dp),
+        )
+
         LazyColumn(
             Modifier.weight(1f),
             contentPadding = PaddingValues(bottom = 96.dp),
