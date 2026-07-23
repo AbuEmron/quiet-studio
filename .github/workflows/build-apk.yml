@@ -25,20 +25,35 @@ jobs:
       - name: Build
         run: |
           chmod +x gradlew
-          ./gradlew assembleDebug --stacktrace --no-daemon
+          set -o pipefail
+          ./gradlew assembleDebug --stacktrace --no-daemon 2>&1 | tee build.log
+
+      - name: Publish build log to ci-log branch
+        if: always()
+        run: |
+          mkdir -p /tmp/logrepo && cd /tmp/logrepo
+          git init -q -b ci-log
+          tail -c 900000 "$GITHUB_WORKSPACE/build.log" > build.log || echo "no log" > build.log
+          git config user.email "ci@quietstudio"
+          git config user.name "CI"
+          git add build.log
+          git commit -qm "build log ${GITHUB_SHA}"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" ci-log
+
+      - name: Publish APK to apk-release branch
+        if: success()
+        run: |
+          mkdir -p /tmp/apkrepo && cd /tmp/apkrepo
+          git init -q -b apk-release
+          cp "$GITHUB_WORKSPACE/app/build/outputs/apk/debug/app-debug.apk" quiet-studio-debug.apk
+          git config user.email "ci@quietstudio"
+          git config user.name "CI"
+          git add quiet-studio-debug.apk
+          git commit -qm "apk ${GITHUB_SHA}"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" apk-release
 
       - uses: actions/upload-artifact@v4
+        if: success()
         with:
           name: quiet-studio-debug
           path: app/build/outputs/apk/debug/app-debug.apk
-
-      - name: Publish APK as release
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          cp app/build/outputs/apk/debug/app-debug.apk quiet-studio-debug.apk
-          gh release delete latest-debug --yes || true
-          git push --delete origin latest-debug 2>/dev/null || true
-          gh release create latest-debug quiet-studio-debug.apk \
-            --title "Quiet Studio — latest debug build" \
-            --notes "Auto-built from ${GITHUB_SHA}. Sideload: enable 'install unknown apps', open the APK."
