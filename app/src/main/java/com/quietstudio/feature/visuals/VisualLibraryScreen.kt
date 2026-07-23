@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -166,10 +167,15 @@ fun VisualLibraryScreen(
         }
 
         // bottom tabs (Videos/Images in the mock map to procedural categories here)
+        // The dark bar extends behind the system navigation bar for the
+        // edge-to-edge look, but navigationBarsPadding pushes its CONTENT above
+        // the gesture pill / 3-button bar so the tabs stay tappable. Insets
+        // handle both nav styles automatically — no fixed dp.
         Row(
             Modifier
                 .fillMaxWidth()
                 .background(Color(0xFF121218))
+                .navigationBarsPadding()
                 .padding(vertical = 10.dp),
             horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
