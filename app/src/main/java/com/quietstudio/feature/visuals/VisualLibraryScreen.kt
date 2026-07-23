@@ -26,6 +26,7 @@ import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Gradient
 import androidx.compose.material.icons.rounded.Grain
 import androidx.compose.material.icons.rounded.Landscape
+import androidx.compose.material.icons.rounded.Movie
 import androidx.compose.material.icons.rounded.Waves
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
@@ -57,6 +58,7 @@ import com.quietstudio.core.model.SubtitleStyle
 import com.quietstudio.core.model.VisualConfig
 import com.quietstudio.core.model.VisualPack
 import com.quietstudio.feature.editor.GRADIENT_PRESETS
+import com.quietstudio.ui.components.AnimatedThumb
 import com.quietstudio.ui.components.QuietSearchField
 import com.quietstudio.ui.components.SheetHeader
 import com.quietstudio.ui.components.VisualThumb
@@ -66,6 +68,7 @@ import com.quietstudio.ui.theme.VioletSoft
 import java.util.UUID
 
 private enum class VisualTab(val label: String, val icon: ImageVector) {
+    ANIMATED("Animated", Icons.Rounded.Movie),
     SCENERY("Scenery", Icons.Rounded.Landscape),
     GRADIENTS("Gradients", Icons.Rounded.Gradient),
     MOTION("Motion", Icons.Rounded.Waves),
@@ -131,8 +134,28 @@ fun VisualLibraryScreen(
             }
         }
 
+        // Bundled animated scenes, mapped to catalog items the same way as the
+        // procedural ones — kind = ANIMATED, sourceUri = the asset video.
+        val animatedItems = remember(viewModel.animated) {
+            viewModel.animated.map { scene ->
+                CatalogItem(
+                    name = scene.title,
+                    category = scene.group,
+                    visual = VisualConfig(
+                        kind = BackgroundKind.ANIMATED.name,
+                        sourceUri = viewModel.animatedUri(scene),
+                        filmGrain = 0.12f, vignette = 0.25f,
+                    ),
+                )
+            }
+        }
+
         val items: List<Any> = when (tab) {
             VisualTab.PACKS -> packs
+            VisualTab.ANIMATED -> animatedItems.filter { item ->
+                (category == "All" || item.category == category) &&
+                    (query.isBlank() || item.name.contains(query, true))
+            }
             else -> catalog.filter { item ->
                 item.visual.kind == when (tab) {
                     VisualTab.SCENERY -> BackgroundKind.SCENERY.name
@@ -150,6 +173,8 @@ fun VisualLibraryScreen(
         Text(
             text = when {
                 tab == VisualTab.PACKS -> "${items.size} saved ${if (items.size == 1) "pack" else "packs"}"
+                tab == VisualTab.ANIMATED -> "${items.size} animated scenes" +
+                    if (category == "All") "" else " · $category"
                 tab == VisualTab.SCENERY -> "${items.size} scenes" +
                     if (category == "All") "" else " · $category"
                 else -> "${items.size} ${tab.label.lowercase()}"
@@ -250,13 +275,15 @@ private fun CatalogCard(item: CatalogItem, onClick: () -> Unit) {
             .clickable { onClick() },
     ) {
         Box {
-            VisualThumb(
-                item.visual,
-                Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(9f / 14f)
-                    .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)),
-            )
+            val thumbMod = Modifier
+                .fillMaxWidth()
+                .aspectRatio(9f / 14f)
+                .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+            if (item.visual.kind == BackgroundKind.ANIMATED.name && item.visual.sourceUri != null) {
+                AnimatedThumb(item.visual.sourceUri!!, thumbMod)
+            } else {
+                VisualThumb(item.visual, thumbMod)
+            }
             Text(
                 item.category,
                 style = MaterialTheme.typography.labelSmall, color = Color.White,

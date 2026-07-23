@@ -101,10 +101,13 @@ class Media3ExportEngine @Inject constructor() : MediaEngine {
                 res.width, res.height, Presentation.LAYOUT_SCALE_TO_FIT_WITH_CROP
             )
 
+            // VIDEO (user import) and ANIMATED (bundled scene) both composite a
+            // real video as the export background; everything else renders a
+            // held base frame and lets the overlay paint the procedural scene.
+            val kind = BackgroundKind.valueOf(project.visual.kind)
+            val videoBacked = kind == BackgroundKind.VIDEO || kind == BackgroundKind.ANIMATED
             val videoItems: List<EditedMediaItem> =
-                if (BackgroundKind.valueOf(project.visual.kind) == BackgroundKind.VIDEO &&
-                    project.visual.sourceUri != null
-                ) {
+                if (videoBacked && project.visual.sourceUri != null) {
                     buildVideoBackgroundItems(context, project.visual.sourceUri!!, durationMs)
                 } else {
                     listOf(baseFrameItem(context, res.width, res.height, durationMs, fps))
@@ -220,7 +223,17 @@ class Media3ExportEngine @Inject constructor() : MediaEngine {
         val uri = Uri.parse(uriString)
         val retriever = android.media.MediaMetadataRetriever()
         val videoDurMs = try {
-            retriever.setDataSource(context, uri)
+            // Bundled scenes are asset:/// URIs; MediaMetadataRetriever can't
+            // resolve those via setDataSource(context, uri), so open the asset
+            // fd directly (mp4 is stored uncompressed — see noCompress).
+            val assetPath = com.quietstudio.core.media.scenes.AnimatedScenes.assetPath(uriString)
+            if (assetPath != null) {
+                context.assets.openFd(assetPath).use { afd ->
+                    retriever.setDataSource(afd.fileDescriptor, afd.startOffset, afd.length)
+                }
+            } else {
+                retriever.setDataSource(context, uri)
+            }
             retriever.extractMetadata(
                 android.media.MediaMetadataRetriever.METADATA_KEY_DURATION
             )?.toLongOrNull() ?: durationMs
@@ -269,7 +282,9 @@ private class TimelineOverlay(
     private val subtitles = SubtitlePainter(width, height, context)
     private val bitmap: Bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
     private val canvas = Canvas(bitmap)
-    private val isVideoBg = BackgroundKind.valueOf(project.visual.kind) == BackgroundKind.VIDEO
+    private val isVideoBg = BackgroundKind.valueOf(project.visual.kind).let {
+        it == BackgroundKind.VIDEO || it == BackgroundKind.ANIMATED
+    }
 
     init {
         if (BackgroundKind.valueOf(project.visual.kind) == BackgroundKind.IMAGE &&

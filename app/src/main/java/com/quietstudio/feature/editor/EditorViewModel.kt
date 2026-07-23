@@ -19,6 +19,7 @@ import com.quietstudio.core.model.VisualPack
 import com.quietstudio.core.music.MusicEngine
 import com.quietstudio.core.music.MusicLibrary
 import com.quietstudio.data.ExportQueueRepository
+import com.quietstudio.core.media.scenes.AnimatedScenes
 import com.quietstudio.data.MusicRepository
 import com.quietstudio.data.Project
 import com.quietstudio.data.ProjectRepository
@@ -58,6 +59,7 @@ class EditorViewModel @Inject constructor(
     private val transcription: TranscriptionEngine,
     val musicLibrary: MusicLibrary,
     val musicEngine: MusicEngine,
+    val animatedScenes: AnimatedScenes,
     musicRepository: MusicRepository,
 ) : ViewModel() {
 
@@ -151,6 +153,16 @@ class EditorViewModel @Inject constructor(
     fun updateStyle(style: SubtitleStyle) = mutate { it.copy(subtitleStyle = style) }
 
     fun updateVisual(visual: VisualConfig) = mutate { it.copy(visual = visual) }
+
+    /** Sets a bundled animated scene video as the project background. */
+    fun setAnimatedScene(scene: com.quietstudio.core.media.scenes.AnimatedScene) = mutate {
+        it.copy(
+            visual = it.visual.copy(
+                kind = com.quietstudio.core.model.BackgroundKind.ANIMATED.name,
+                sourceUri = animatedScenes.uriFor(scene),
+            )
+        )
+    }
 
     fun updateExportConfig(config: com.quietstudio.core.model.ExportConfig) =
         mutate { it.copy(export = config) }

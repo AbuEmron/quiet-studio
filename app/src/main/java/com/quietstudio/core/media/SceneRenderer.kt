@@ -49,7 +49,10 @@ class SceneRenderer(
             BackgroundKind.SOLID -> canvas.drawColor(config.gradientColors.first().toInt())
             BackgroundKind.GRADIENT -> drawGradient(canvas, config, t)
             BackgroundKind.IMAGE -> drawImage(canvas, config, progress)
-            BackgroundKind.VIDEO -> Unit // video frames come from the decoder underneath
+            // Video-backed kinds: frames come from the decoder underneath
+            // (ExoPlayer in preview, the Transformer video sequence in export),
+            // so the renderer only paints grain/vignette/subtitles on top.
+            BackgroundKind.VIDEO, BackgroundKind.ANIMATED -> Unit
             BackgroundKind.PARTICLES -> { drawGradient(canvas, config, t * 0.4f); drawParticles(canvas, config, t) }
             BackgroundKind.MOTION -> drawMotion(canvas, config, t)
             BackgroundKind.SCENERY -> scenery.draw(canvas, config, timeMs, durationMs)

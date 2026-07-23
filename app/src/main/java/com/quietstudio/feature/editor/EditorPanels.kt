@@ -384,6 +384,7 @@ fun VisualSheet(content: ProjectContent, vm: EditorViewModel, onClose: () -> Uni
             ) {
                 items(
                     listOf(
+                        BackgroundKind.ANIMATED.name to "Animated",
                         BackgroundKind.SCENERY.name to "Scenery",
                         BackgroundKind.GRADIENT.name to "Gradient",
                         BackgroundKind.MOTION.name to "Motion",
@@ -408,6 +409,15 @@ fun VisualSheet(content: ProjectContent, vm: EditorViewModel, onClose: () -> Uni
                                 when (kind) {
                                     BackgroundKind.IMAGE.name -> pickImage.launch(arrayOf("image/*"))
                                     BackgroundKind.VIDEO.name -> pickVideo.launch(arrayOf("video/*"))
+                                    BackgroundKind.ANIMATED.name -> {
+                                        // Land on a playable scene immediately; keep the
+                                        // current one if the project already had one.
+                                        val current = vm.animatedScenes.scenes
+                                            .firstOrNull { vm.animatedScenes.uriFor(it) == v.sourceUri }
+                                        if (current != null) vm.updateVisual(v.copy(kind = kind))
+                                        else vm.animatedScenes.scenes.firstOrNull()
+                                            ?.let { vm.setAnimatedScene(it) }
+                                    }
                                     else -> vm.updateVisual(v.copy(kind = kind))
                                 }
                             }
@@ -419,6 +429,46 @@ fun VisualSheet(content: ProjectContent, vm: EditorViewModel, onClose: () -> Uni
                         )
                     }
                 }
+            }
+        }
+        if (v.kind == BackgroundKind.ANIMATED.name) {
+            item {
+                SettingLabel("Animated scene")
+                LazyRow(
+                    contentPadding = PaddingValues(horizontal = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    items(vm.animatedScenes.scenes) { scene ->
+                        val uri = vm.animatedScenes.uriFor(scene)
+                        val selected = v.sourceUri == uri
+                        Box(
+                            Modifier
+                                .background(
+                                    if (selected) Violet.copy(alpha = 0.18f) else CardHigh,
+                                    RoundedCornerShape(12.dp),
+                                )
+                                .then(
+                                    if (selected) Modifier.border(1.dp, Violet, RoundedCornerShape(12.dp))
+                                    else Modifier
+                                )
+                                .clickable { vm.setAnimatedScene(scene) }
+                                .padding(horizontal = 13.dp, vertical = 9.dp),
+                        ) {
+                            Text(
+                                scene.title,
+                                style = MaterialTheme.typography.labelMedium,
+                                color = if (selected) Color.White else TextSecondary,
+                            )
+                        }
+                    }
+                }
+                Text(
+                    "Hand-animated looping scenes — play muted behind your video and burn " +
+                        "into the export.",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = TextSecondary,
+                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp),
+                )
             }
         }
         if (v.kind == BackgroundKind.SCENERY.name) {

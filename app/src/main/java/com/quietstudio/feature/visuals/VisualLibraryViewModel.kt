@@ -2,6 +2,8 @@ package com.quietstudio.feature.visuals
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.quietstudio.core.media.scenes.AnimatedScene
+import com.quietstudio.core.media.scenes.AnimatedScenes
 import com.quietstudio.core.model.VisualPack
 import com.quietstudio.data.TemplateRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +16,12 @@ import javax.inject.Inject
 @HiltViewModel
 class VisualLibraryViewModel @Inject constructor(
     private val repository: TemplateRepository,
+    animatedScenes: AnimatedScenes,
 ) : ViewModel() {
+
+    /** Bundled animated scene videos, for the Animated tab. */
+    val animated: List<AnimatedScene> = animatedScenes.scenes
+    fun animatedUri(scene: AnimatedScene): String = AnimatedScenes.ASSET_PREFIX + scene.assetPath
 
     val packs: StateFlow<List<VisualPack>> =
         repository.observeVisualPacks()

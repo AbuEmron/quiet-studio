@@ -84,7 +84,7 @@ data class SubtitleStyle(
 
 /* ------------------------------- visuals -------------------------------- */
 
-enum class BackgroundKind { SOLID, GRADIENT, IMAGE, VIDEO, PARTICLES, MOTION, SCENERY }
+enum class BackgroundKind { SOLID, GRADIENT, IMAGE, VIDEO, PARTICLES, MOTION, SCENERY, ANIMATED }
 
 /** Animated scenery themes. AUTO picks a theme matching the music's mood. */
 object SceneryThemes {

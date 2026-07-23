@@ -50,6 +50,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -65,6 +66,7 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -564,14 +566,30 @@ fun PreviewSurface(
         )
     }
 
-    Canvas(modifier.background(Color.Black).then(dragModifier)) {
-        cv.drawColor(android.graphics.Color.BLACK)
-        renderer.drawFrame(cv, content.visual, positionMs, durationMs)
-        subtitles.draw(cv, content.cues, content.subtitleStyle, positionMs)
-        drawContext.canvas.nativeCanvas.drawBitmap(
-            bmp, null,
-            android.graphics.RectF(0f, 0f, size.width, size.height), null,
-        )
+    // Video-backed backgrounds (bundled animated scenes and user-imported
+    // videos) play live behind the overlay Canvas; the Canvas then clears to
+    // transparent and paints only subtitles/grain/vignette on top — the same
+    // compositing the export overlay performs, so preview matches the export.
+    val kindEnum = BackgroundKind.valueOf(content.visual.kind)
+    val videoBacked = (kindEnum == BackgroundKind.ANIMATED || kindEnum == BackgroundKind.VIDEO) &&
+        !sourceUri.isNullOrBlank()
+
+    Box(modifier.background(Color.Black)) {
+        if (videoBacked) {
+            ScenePlayer(uri = sourceUri!!, modifier = Modifier.matchParentSize())
+        }
+        Canvas(Modifier.matchParentSize().then(dragModifier)) {
+            if (videoBacked) {
+                cv.drawColor(android.graphics.Color.TRANSPARENT, android.graphics.PorterDuff.Mode.CLEAR)
+            } else {
+                cv.drawColor(android.graphics.Color.BLACK)
+            }
+            renderer.drawFrame(cv, content.visual, positionMs, durationMs)
+            subtitles.draw(cv, content.cues, content.subtitleStyle, positionMs)
+            drawContext.canvas.nativeCanvas.drawBitmap(
+                bmp, null,
+                android.graphics.RectF(0f, 0f, size.width, size.height), null,
+            )
 
         // Alignment guides while dragging: centre lines light up when snapped,
         // and the three preset heights show as faint dashes.
@@ -597,7 +615,42 @@ fun PreviewSurface(
                 )
             }
         }
+        }
     }
+}
+
+/**
+ * Plays a looping, muted, center-cropped video behind the preview overlay.
+ * One ExoPlayer per URI; released when the surface leaves composition or the
+ * scene changes.
+ */
+@androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
+@Composable
+private fun ScenePlayer(uri: String, modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+    val player = remember(uri) {
+        androidx.media3.exoplayer.ExoPlayer.Builder(context).build().apply {
+            setMediaItem(androidx.media3.common.MediaItem.fromUri(uri))
+            repeatMode = androidx.media3.common.Player.REPEAT_MODE_ONE
+            volume = 0f
+            playWhenReady = true
+            prepare()
+        }
+    }
+    DisposableEffect(uri) { onDispose { player.release() } }
+    AndroidView(
+        modifier = modifier,
+        factory = { ctx ->
+            androidx.media3.ui.PlayerView(ctx).apply {
+                useController = false
+                setKeepContentOnPlayerReset(true)
+                resizeMode = androidx.media3.ui.AspectRatioFrameLayout.RESIZE_MODE_ZOOM
+                setShutterBackgroundColor(android.graphics.Color.BLACK)
+                this.player = player
+            }
+        },
+        update = { it.player = player },
+    )
 }
 
 /** How close (in frame fractions) a drag must get before snapping to a guide. */

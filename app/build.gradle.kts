@@ -17,8 +17,8 @@ android {
         applicationId = "com.quietstudio"
         minSdk = 26
         targetSdk = 35
-        versionCode = 11
-        versionName = "1.8.2"
+        versionCode = 12
+        versionName = "1.9"
 
         vectorDrawables { useSupportLibrary = true }
         buildConfigField("boolean", "WHISPER_ENABLED", enableWhisper.toString())
@@ -55,6 +55,11 @@ android {
     buildFeatures {
         compose = true
         buildConfig = true
+    }
+    androidResources {
+        // Keep bundled scene videos uncompressed so MediaMetadataRetriever can
+        // open them by asset file descriptor for the export path.
+        noCompress += "mp4"
     }
     packaging {
         resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
