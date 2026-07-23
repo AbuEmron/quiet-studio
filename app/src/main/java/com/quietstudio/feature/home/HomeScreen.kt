@@ -249,8 +249,14 @@ fun HomeScreen(
                 .padding(16.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            FeatureCard(Icons.Rounded.ClosedCaption, "Auto Subtitles", "Accurate captions in seconds", Modifier.weight(1f))
-            FeatureCard(Icons.Rounded.GraphicEq, "Auto Ducking", "Lowers music under your voice", Modifier.weight(1f))
+            FeatureCard(
+                Icons.Rounded.ClosedCaption, "Auto Subtitles", "Accurate captions in seconds",
+                Modifier.weight(1f), onClick = onSettings, // Whisper model setup lives there
+            )
+            FeatureCard(
+                Icons.Rounded.GraphicEq, "Auto Ducking", "Lowers music under your voice",
+                Modifier.weight(1f), onClick = onMusic,
+            )
         }
         Row(
             Modifier
@@ -258,8 +264,14 @@ fun HomeScreen(
                 .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            FeatureCard(Icons.Rounded.HighQuality, "High Quality Export", "Cinematic quality every time", Modifier.weight(1f))
-            FeatureCard(Icons.Rounded.Bolt, "Ultra Fast", "Optimized rendering for speed", Modifier.weight(1f))
+            FeatureCard(
+                Icons.Rounded.HighQuality, "High Quality Export", "Cinematic quality every time",
+                Modifier.weight(1f), onClick = onProjects, // export is configured per project
+            )
+            FeatureCard(
+                Icons.Rounded.Bolt, "Ultra Fast", "Optimized rendering for speed",
+                Modifier.weight(1f), onClick = onExports,
+            )
         }
 
         Text(
@@ -308,10 +320,18 @@ private fun SectionHeader(title: String, onSeeAll: () -> Unit) {
 }
 
 @Composable
-private fun FeatureCard(icon: ImageVector, title: String, subtitle: String, modifier: Modifier = Modifier) {
+private fun FeatureCard(
+    icon: ImageVector,
+    title: String,
+    subtitle: String,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+) {
     Column(
         modifier
             .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(16.dp))
+            .clickable { onClick() }
             .padding(14.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {

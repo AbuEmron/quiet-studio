@@ -1,5 +1,7 @@
 package com.quietstudio.feature.music
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -34,6 +36,7 @@ import androidx.compose.material.icons.rounded.AllInclusive
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material.icons.rounded.Headphones
+import androidx.compose.material.icons.rounded.LibraryAdd
 import androidx.compose.material.icons.rounded.LibraryMusic
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.MusicNote
@@ -104,10 +107,20 @@ fun MusicLibraryScreen(
     val favorites by viewModel.favorites.collectAsStateWithLifecycle()
     val nowPlaying by viewModel.engine.nowPlaying.collectAsStateWithLifecycle()
     val isPlaying by viewModel.engine.isPlaying.collectAsStateWithLifecycle()
+    val imported by viewModel.imported.collectAsStateWithLifecycle()
+    val importError by viewModel.importError.collectAsStateWithLifecycle()
     var query by remember { mutableStateOf("") }
     var tag by remember { mutableStateOf<String?>(null) }
 
-    val tracks = viewModel.library.search(query = query, tag = tag)
+    // `imported` is read so the list recomposes the moment an import lands;
+    // the library itself already resolves imported tracks in search().
+    val tracks = remember(query, tag, imported) {
+        viewModel.library.search(query = query, tag = tag)
+    }
+
+    val importPicker = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri -> uri?.let(viewModel::importTrack) }
 
     Column(
         Modifier
@@ -116,9 +129,23 @@ fun MusicLibraryScreen(
             .padding(bottom = 86.dp), // clear the floating bottom nav
     ) {
         SheetHeader("Music Library", Icons.AutoMirrored.Rounded.ArrowBack, onBack) {
+            IconButton(onClick = { importPicker.launch(arrayOf("audio/*")) }) {
+                Icon(Icons.Rounded.LibraryAdd, "Import audio", tint = VioletSoft)
+            }
             IconButton(onClick = viewModel::shuffle) {
                 Icon(Icons.Rounded.Shuffle, "Shuffle", tint = VioletSoft)
             }
+        }
+
+        importError?.let {
+            Text(
+                it,
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier
+                    .padding(horizontal = 20.dp, vertical = 4.dp)
+                    .clickable { viewModel.consumeImportError() },
+            )
         }
 
         QuietSearchField(
@@ -177,6 +204,22 @@ fun MusicLibraryScreen(
                         .padding(horizontal = 20.dp)
                         .padding(top = 10.dp, bottom = 6.dp),
                 )
+            }
+            if (tracks.isEmpty()) {
+                item {
+                    Text(
+                        if (query.isBlank() && tag == null) {
+                            "No music yet. Tap the import icon above to add your own audio " +
+                                "files — they're copied to this device and never leave it."
+                        } else {
+                            "No tracks match. Clear the search or mood filter, or import " +
+                                "your own audio with the icon above."
+                        },
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = TextSecondary,
+                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp),
+                    )
+                }
             }
             items(tracks, key = { it.id }) { track ->
                 TrackRow(

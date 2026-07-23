@@ -109,7 +109,7 @@ fun SettingsScreen(
                 listOf(
                     "No accounts, no analytics, no ads",
                     "Recordings, projects and exports never leave this device",
-                    "Music library is bundled — 30 original instrumentals, yours to use",
+                    "Bring your own music — imports are copied to this device and stay here",
                     "Cloud sync will only ever exist as an explicit opt-in module",
                 ).forEach {
                     Text(
@@ -123,7 +123,7 @@ fun SettingsScreen(
 
         SectionLabel("About")
         Text(
-            "Quiet Studio 1.0 — a private production room for one creator.",
+            "Quiet Studio 1.1 — a private production room for one creator.",
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp),

@@ -19,6 +19,7 @@ import com.quietstudio.core.model.VisualPack
 import com.quietstudio.core.music.MusicEngine
 import com.quietstudio.core.music.MusicLibrary
 import com.quietstudio.data.ExportQueueRepository
+import com.quietstudio.data.MusicRepository
 import com.quietstudio.data.Project
 import com.quietstudio.data.ProjectRepository
 import com.quietstudio.data.TemplateRepository
@@ -57,9 +58,19 @@ class EditorViewModel @Inject constructor(
     private val transcription: TranscriptionEngine,
     val musicLibrary: MusicLibrary,
     val musicEngine: MusicEngine,
+    musicRepository: MusicRepository,
 ) : ViewModel() {
 
     val projectId: String = savedStateHandle["projectId"] ?: ""
+
+    init {
+        // Imported tracks must resolve here too — a project whose music was
+        // imported has to play and label correctly even if the Music screen
+        // was never opened this session.
+        viewModelScope.launch {
+            musicRepository.observeImported().collect { musicLibrary.registerImported(it) }
+        }
+    }
 
     data class UiState(
         val project: Project? = null,

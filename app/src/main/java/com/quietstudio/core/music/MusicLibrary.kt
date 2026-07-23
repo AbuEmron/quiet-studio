@@ -56,10 +56,27 @@ class MusicLibrary @Inject constructor(
         }.getOrElse { emptyList() }
     }
 
-    val moods: List<String> by lazy { tracks.map { it.mood }.distinct().sorted() }
-    val allTags: List<String> by lazy { tracks.flatMap { it.tags }.distinct().sorted() }
+    /**
+     * Tracks the user imported at runtime (copied into app storage). Kept in
+     * this singleton so every byId/search call site — editor playback, the
+     * music sheet, export labels — resolves them without knowing where a
+     * track came from. Refreshed from the database by the view models that
+     * observe it; the export worker resolves from the database directly, since
+     * a queued render can outlive this process.
+     */
+    @Volatile
+    private var imported: List<MusicTrack> = emptyList()
 
-    fun byId(id: String?): MusicTrack? = tracks.firstOrNull { it.id == id }
+    fun registerImported(tracks: List<MusicTrack>) {
+        imported = tracks
+    }
+
+    private val all: List<MusicTrack> get() = tracks + imported
+
+    val moods: List<String> get() = all.map { it.mood }.distinct().sorted()
+    val allTags: List<String> get() = all.flatMap { it.tags }.distinct().sorted()
+
+    fun byId(id: String?): MusicTrack? = all.firstOrNull { it.id == id }
 
     fun search(
         query: String = "",
@@ -69,7 +86,7 @@ class MusicLibrary @Inject constructor(
         energy: Int? = null,
         extra: List<MusicTrack> = emptyList(),
     ): List<MusicTrack> =
-        (tracks + extra).filter { t ->
+        (all + extra).distinctBy { it.id }.filter { t ->
             (query.isBlank() || t.title.contains(query, true) ||
                 t.mood.contains(query, true) || t.tags.any { it.contains(query, true) } ||
                 t.instruments.any { it.contains(query, true) }) &&
@@ -80,5 +97,5 @@ class MusicLibrary @Inject constructor(
         }
 
     fun random(mood: String? = null): MusicTrack? =
-        (if (mood == null) tracks else tracks.filter { it.mood == mood }).randomOrNull()
+        (if (mood == null) all else all.filter { it.mood == mood }).randomOrNull()
 }

@@ -39,8 +39,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
-import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -50,26 +49,47 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.quietstudio.ui.theme.Ink
 import com.quietstudio.ui.theme.QuietGradients
+import com.quietstudio.ui.theme.Rose
 import com.quietstudio.ui.theme.TextSecondary
 import com.quietstudio.ui.theme.Violet
 
-/** The glowing mic button — the app's signature control. */
+/**
+ * The glowing mic button — the app's signature control.
+ *
+ * The halo is a pure radial gradient that fades to fully transparent at its
+ * own edge, so it reads as a soft concentric ring hugging the button and can
+ * never show a bounding box. (The previous effect — a sweep gradient pushed
+ * through `blur()` and rotated — rendered its rectangular blur layer as a
+ * spinning amber/purple square, and `blur` is a no-op below API 31, which made
+ * the hard square edge worse on older phones.) A slow breathing pulse keeps it
+ * alive without any rotation; radial symmetry means there is nothing to spin.
+ */
 @Composable
 fun GlowMicButton(size: Dp, onClick: () -> Unit, iconScale: Float = 0.42f) {
-    val spin = rememberInfiniteTransition(label = "glow")
-    val angle by spin.animateFloat(
-        0f, 360f,
-        infiniteRepeatable(tween(9000, easing = LinearEasing), RepeatMode.Restart),
-        label = "angle",
+    val breath = rememberInfiniteTransition(label = "glow")
+    val pulse by breath.animateFloat(
+        0.82f, 1f,
+        infiniteRepeatable(tween(2600, easing = LinearEasing), RepeatMode.Reverse),
+        label = "pulse",
+    )
+    // Transparent under the button, brightest just past its rim, gone by the
+    // halo's edge — contained, and works identically on every API level.
+    val halo = Brush.radialGradient(
+        0.00f to Color.Transparent,
+        0.58f to Violet.copy(alpha = 0.55f),
+        0.74f to Rose.copy(alpha = 0.30f),
+        1.00f to Color.Transparent,
     )
     Box(contentAlignment = Alignment.Center) {
-        // warm halo
         Box(
             Modifier
-                .size(size * 1.28f)
-                .rotate(angle)
-                .blur(18.dp)
-                .background(QuietGradients.micGlow, CircleShape),
+                .size(size * 1.5f)
+                .graphicsLayer {
+                    scaleX = pulse
+                    scaleY = pulse
+                    alpha = pulse
+                }
+                .background(halo, CircleShape),
         )
         Box(
             Modifier

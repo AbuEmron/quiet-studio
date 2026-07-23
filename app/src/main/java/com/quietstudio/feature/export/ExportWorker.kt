@@ -15,7 +15,9 @@ import com.quietstudio.core.model.ExportConfig
 import com.quietstudio.core.music.MusicLibrary
 import com.quietstudio.data.AppJson
 import com.quietstudio.data.ExportQueueRepository
+import com.quietstudio.data.MusicRepository
 import com.quietstudio.data.ProjectRepository
+import kotlinx.coroutines.flow.first
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import java.io.File
@@ -33,6 +35,7 @@ class ExportWorker @AssistedInject constructor(
     private val queue: ExportQueueRepository,
     private val engine: MediaEngine,
     private val musicLibrary: MusicLibrary,
+    private val musicRepository: MusicRepository,
 ) : CoroutineWorker(appContext, params) {
 
     companion object {
@@ -58,7 +61,11 @@ class ExportWorker @AssistedInject constructor(
         val safeTitle = job.projectTitle.replace(Regex("[^A-Za-z0-9 _-]"), "").ifBlank { "export" }
         val outFile = File(outDir, "${safeTitle}_${System.currentTimeMillis()}.mp4")
 
+        // Resolve from the database as well as the bundled catalog: a queued
+        // render can start in a fresh process, where the in-memory imported
+        // registry has not been populated yet.
         val track = musicLibrary.byId(content.music.trackId)
+            ?: musicRepository.observeImported().first().firstOrNull { it.id == content.music.trackId }
         var lastNotified = 0
         val result = engine.exportProject(
             applicationContext, content, track, outFile,
