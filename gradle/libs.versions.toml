@@ -11,6 +11,7 @@ hilt = "2.53.1"
 hiltNavigationCompose = "1.2.0"
 room = "2.6.1"
 media3 = "1.5.0"
+camerax = "1.4.1"
 coroutines = "1.9.0"
 serialization = "1.7.3"
 datastore = "1.1.1"
@@ -46,6 +47,11 @@ media3-effect = { group = "androidx.media3", name = "media3-effect", version.ref
 media3-muxer = { group = "androidx.media3", name = "media3-muxer", version.ref = "media3" }
 media3-common = { group = "androidx.media3", name = "media3-common", version.ref = "media3" }
 media3-ui = { group = "androidx.media3", name = "media3-ui", version.ref = "media3" }
+camera-core = { group = "androidx.camera", name = "camera-core", version.ref = "camerax" }
+camera-camera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "camerax" }
+camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "camerax" }
+camera-video = { group = "androidx.camera", name = "camera-video", version.ref = "camerax" }
+camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "camerax" }
 kotlinx-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
 androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }

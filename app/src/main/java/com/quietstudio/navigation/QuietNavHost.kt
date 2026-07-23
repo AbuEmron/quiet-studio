@@ -24,6 +24,7 @@ import androidx.navigation.navArgument
 import com.quietstudio.feature.editor.EditorScreen
 import com.quietstudio.feature.export.ExportQueueScreen
 import com.quietstudio.feature.home.HomeScreen
+import com.quietstudio.feature.camera.CameraScreen
 import com.quietstudio.feature.music.MusicLibraryScreen
 import com.quietstudio.feature.projects.ProjectsScreen
 import com.quietstudio.feature.record.RecordScreen
@@ -39,6 +40,7 @@ object Routes {
     const val EDITOR = "editor/{projectId}"
     const val PROJECTS = "projects"
     const val MUSIC = "music"
+    const val CAMERA = "camera"
     const val VISUALS = "visuals"
     const val TEMPLATES = "templates"
     const val EXPORTS = "exports"
@@ -91,6 +93,7 @@ fun QuietNavHost(navController: NavHostController = rememberNavController()) {
             composable(Routes.HOME) {
                 HomeScreen(
                     onRecord = { navController.navigate(Routes.record()) },
+                    onCamera = { navController.navigate(Routes.CAMERA) },
                     onProjects = { switchTab(Routes.PROJECTS) },
                     onMusic = { switchTab(Routes.MUSIC) },
                     onVisuals = { navController.navigate(Routes.VISUALS) },
@@ -135,6 +138,16 @@ fun QuietNavHost(navController: NavHostController = rememberNavController()) {
             }
             composable(Routes.MUSIC) {
                 MusicLibraryScreen(onBack = { switchTab(Routes.HOME) })
+            }
+            composable(Routes.CAMERA) {
+                CameraScreen(
+                    onBack = { navController.popBackStack() },
+                    onClipReady = { id ->
+                        navController.navigate(Routes.editor(id)) {
+                            popUpTo(Routes.HOME)
+                        }
+                    },
+                )
             }
             composable(Routes.VISUALS) {
                 VisualLibraryScreen(onBack = { navController.popBackStack() })

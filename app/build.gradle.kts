@@ -17,8 +17,8 @@ android {
         applicationId = "com.quietstudio"
         minSdk = 26
         targetSdk = 35
-        versionCode = 12
-        versionName = "1.9"
+        versionCode = 13
+        versionName = "1.10"
 
         vectorDrawables { useSupportLibrary = true }
         buildConfigField("boolean", "WHISPER_ENABLED", enableWhisper.toString())
@@ -95,6 +95,11 @@ dependencies {
     implementation(libs.media3.muxer)
     implementation(libs.media3.common)
     implementation(libs.media3.ui)
+    implementation(libs.camera.core)
+    implementation(libs.camera.camera2)
+    implementation(libs.camera.lifecycle)
+    implementation(libs.camera.video)
+    implementation(libs.camera.view)
 
     implementation(libs.kotlinx.coroutines)
     implementation(libs.kotlinx.serialization.json)

@@ -32,6 +32,7 @@ import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.MusicNote
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.Style
+import androidx.compose.material.icons.rounded.Videocam
 import androidx.compose.material.icons.rounded.Wallpaper
 import androidx.compose.material.icons.rounded.WorkspacePremium
 import androidx.compose.material3.DropdownMenu
@@ -72,6 +73,7 @@ import java.util.Locale
 @Composable
 fun HomeScreen(
     onRecord: () -> Unit,
+    onCamera: () -> Unit = {},
     onProjects: () -> Unit,
     onMusic: () -> Unit,
     onVisuals: () -> Unit,
@@ -142,6 +144,7 @@ fun HomeScreen(
                 .padding(vertical = 14.dp),
             horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
+            QuickNav(Icons.Rounded.Videocam, "Record", onCamera)
             QuickNav(Icons.Rounded.Folder, "Projects", onProjects)
             QuickNav(Icons.Rounded.MusicNote, "Music", onMusic)
             QuickNav(Icons.Rounded.Wallpaper, "Visuals", onVisuals)
