@@ -364,6 +364,131 @@ object SceneCatalog {
         ),
     )
 
+    /* --------------------- Wave 3 · Night-life (10) ---------------------- */
+
+    private val NEON_ALLEY = SceneSpec(
+        id = "neon-alley", name = "Neon Alley", group = SceneGroup.NIGHTLIFE,
+        layers = listOf(
+            Sky(listOf(c(0xFF0A0716), c(0xFF150B24), c(0xFF241030)), extent = 0.6f),
+            WindowGrid(wall = c(0xFF120C22), window = c(0xFFFFD9A0), left = 0f, top = 0f, right = 0.34f, bottom = 0.82f, cols = 4, rows = 12, litFraction = 0.5f),
+            WindowGrid(wall = c(0xFF0E0A1E), window = c(0xFF8FD8FF), left = 0.66f, top = 0f, right = 1f, bottom = 0.82f, cols = 4, rows = 12, litFraction = 0.5f),
+            Neon(color = c(0xFFFF3D8A), x = 0.22f, y = 0.30f, w = 0.05f, h = 0.20f, vertical = true),
+            Neon(color = c(0xFF34E0D0), x = 0.78f, y = 0.42f, w = 0.05f, h = 0.16f, vertical = true),
+            Neon(color = c(0xFFFFC24A), x = 0.5f, y = 0.24f, w = 0.24f, h = 0.02f),
+            Reflections(listOf(c(0xFFFF3D8A), c(0xFF34E0D0), c(0xFFFFC24A)), top = 0.82f),
+            RainGlass(color = c(0x55CADCE8), streaks = 30),
+        ),
+    )
+
+    private val ROOFTOP_SKYLINE = SceneSpec(
+        id = "rooftop-skyline", name = "Rooftop Skyline", group = SceneGroup.NIGHTLIFE,
+        layers = listOf(
+            Sky(listOf(c(0xFF0A0F26), c(0xFF1A2148), c(0xFF33244E)), extent = 0.85f),
+            Particles(STARS, color = c(0xFFEFF0FF), count = 40, bandBottom = 0.4f),
+            Celestial(MOON, x = 0.78f, y = 0.15f, radius = 0.05f, color = c(0xFFEFF3FF), glow = c(0x395E77C9)),
+            SpaceSkyline(silhouette = c(0xFF120E28), windowColor = c(0xFFFFD9A0), horizonY = 0.74f, towers = 11),
+            SpaceSkyline(silhouette = c(0xFF0A0819), windowColor = c(0xFF7FD8FF), horizonY = 0.86f, towers = 8),
+            Reflections(listOf(c(0xFFFFD9A0), c(0xFF7FD8FF)), top = 0.90f),
+        ),
+    )
+
+    private val LAST_TRAIN = SceneSpec(
+        id = "last-train", name = "Last Train", group = SceneGroup.NIGHTLIFE,
+        layers = listOf(
+            Sky(listOf(c(0xFF10131F), c(0xFF181C2C), c(0xFF20232F)), extent = 0.7f),
+            WindowGrid(wall = c(0xFF14161F), window = c(0xFF9FB4C4), left = 0f, top = 0.08f, right = 1f, bottom = 0.34f, cols = 14, rows = 3, litFraction = 0.7f),
+            LightBox(glow = c(0x55FFE7B0), x = 0.5f, y = 0.52f, w = 0.9f, h = 0.05f, face = listOf(c(0xFFF2E2B0), c(0xFFCBB884))),
+            Ridge(c(0xFF0E1018), baseY = 0.60f, amp = 0.006f, detail = 2, kind = BLOCKS),
+            Neon(color = c(0xFF4AD0B0), x = 0.30f, y = 0.46f, w = 0.10f, h = 0.018f),
+            Neon(color = c(0xFFFF7A5A), x = 0.72f, y = 0.46f, w = 0.10f, h = 0.018f),
+            Reflections(listOf(c(0xFFF2E2B0), c(0xFF4AD0B0)), top = 0.66f),
+        ),
+    )
+
+    private val VENDING_GLOW = SceneSpec(
+        id = "vending-glow", name = "Vending Glow", group = SceneGroup.NIGHTLIFE,
+        layers = listOf(
+            Sky(listOf(c(0xFF08090F), c(0xFF0E1018), c(0xFF141722)), extent = 1f),
+            WindowGrid(wall = c(0xFF0C0D14), window = c(0xFF3A4658), left = 0f, top = 0f, right = 1f, bottom = 0.7f, cols = 8, rows = 8, litFraction = 0.18f),
+            LightBox(glow = c(0x66FF6060), x = 0.30f, y = 0.60f, w = 0.14f, h = 0.32f, face = listOf(c(0xFFFF7A6A), c(0xFFB53F4A))),
+            LightBox(glow = c(0x664A9EFF), x = 0.46f, y = 0.60f, w = 0.14f, h = 0.32f, face = listOf(c(0xFF6AB0FF), c(0xFF2E5A9E))),
+            Reflections(listOf(c(0xFFFF7A6A), c(0xFF6AB0FF)), top = 0.82f),
+            RainGlass(color = c(0x44CADCE8), streaks = 24),
+        ),
+    )
+
+    private val BACKSTREET_LANTERNS = SceneSpec(
+        id = "backstreet-lanterns", name = "Backstreet Lanterns", group = SceneGroup.NIGHTLIFE,
+        layers = listOf(
+            Sky(listOf(c(0xFF120A16), c(0xFF1E0F1C), c(0xFF2A1420)), extent = 0.6f),
+            WindowGrid(wall = c(0xFF160C16), window = c(0xFFFFC98A), left = 0f, top = 0f, right = 0.30f, bottom = 0.9f, cols = 3, rows = 12, litFraction = 0.4f),
+            WindowGrid(wall = c(0xFF130A14), window = c(0xFFFFC98A), left = 0.70f, top = 0f, right = 1f, bottom = 0.9f, cols = 3, rows = 12, litFraction = 0.4f),
+            Lanterns(color = c(0xFFFF7A4A), glow = c(0x66FF6A34), count = 7, pathY = 0.34f),
+            Reflections(listOf(c(0xFFFF7A4A), c(0xFFFFC98A)), top = 0.84f),
+        ),
+    )
+
+    private val RAIN_ON_GLASS = SceneSpec(
+        id = "rain-on-glass", name = "Rain on Glass", group = SceneGroup.NIGHTLIFE,
+        layers = listOf(
+            Sky(listOf(c(0xFF0C0F1C), c(0xFF141A2E), c(0xFF1E2740)), extent = 1f),
+            Bokeh(
+                listOf(c(0xFFFFC24A), c(0xFFFF5A8A), c(0xFF4AD0E0), c(0xFF8FA0FF)),
+                count = 22, bandTop = 0.15f, bandBottom = 0.85f,
+            ),
+            RainGlass(color = c(0x88BFD4E8), streaks = 60),
+        ),
+    )
+
+    private val HIGHWAY_RIBBON = SceneSpec(
+        id = "highway-ribbon", name = "Highway Ribbon", group = SceneGroup.NIGHTLIFE,
+        layers = listOf(
+            Sky(listOf(c(0xFF0A0C1A), c(0xFF141830), c(0xFF241A3A)), extent = 0.7f),
+            Particles(STARS, color = c(0xFFDCE0FF), count = 26, bandBottom = 0.35f),
+            SpaceSkyline(silhouette = c(0xFF120E24), windowColor = c(0xFFFFD9A0), horizonY = 0.58f, towers = 9),
+            TrafficStream(y = 0.66f, count = 18, wrapsPerMin = 7f),
+            TrafficStream(y = 0.72f, count = 14, wrapsPerMin = 5f),
+            Reflections(listOf(c(0xFFFFD9A0), c(0xFFFF5A5A)), top = 0.78f),
+        ),
+    )
+
+    private val HARBOR_DUSK = SceneSpec(
+        id = "harbor-dusk", name = "Harbor Dusk", group = SceneGroup.NIGHTLIFE,
+        layers = listOf(
+            Sky(listOf(c(0xFF2A2350), c(0xFF7A4A6E), c(0xFFE0965E)), extent = 0.7f),
+            Celestial(SUN, x = 0.30f, y = 0.44f, radius = 0.08f, color = c(0xFFFFDCA0), glow = c(0x66FF9E5A)),
+            SpaceSkyline(silhouette = c(0xFF241834), windowColor = c(0xFFFFD08A), horizonY = 0.58f, towers = 10),
+            WaterBand(top = 0.60f, bottom = 0.92f, deep = c(0xFF1B1636), light = c(0xFFCE7E62), glintColor = c(0x88FFC080)),
+            Particles(GULLS, color = c(0xFF2A2038), count = 3),
+        ),
+    )
+
+    private val CROSSWALK_NEON = SceneSpec(
+        id = "crosswalk-neon", name = "Crosswalk Neon", group = SceneGroup.NIGHTLIFE,
+        layers = listOf(
+            Sky(listOf(c(0xFF0B0818), c(0xFF160C26), c(0xFF201232)), extent = 0.55f),
+            WindowGrid(wall = c(0xFF120C22), window = c(0xFFFFD9A0), left = 0f, top = 0f, right = 1f, bottom = 0.5f, cols = 12, rows = 5, litFraction = 0.4f),
+            Neon(color = c(0xFFFF3D8A), x = 0.24f, y = 0.34f, w = 0.16f, h = 0.02f),
+            Neon(color = c(0xFF34E0D0), x = 0.72f, y = 0.30f, w = 0.14f, h = 0.02f),
+            Neon(color = c(0xFFFFC24A), x = 0.5f, y = 0.40f, w = 0.20f, h = 0.02f),
+            Reflections(listOf(c(0xFFFF3D8A), c(0xFF34E0D0), c(0xFFFFC24A), c(0xFFFFFFFF)), top = 0.55f),
+            RainGlass(color = c(0x66BFD4E8), streaks = 44),
+        ),
+    )
+
+    private val WINDOW_BOKEH = SceneSpec(
+        id = "window-bokeh", name = "Window Bokeh", group = SceneGroup.NIGHTLIFE,
+        layers = listOf(
+            Sky(listOf(c(0xFF0E1020), c(0xFF161A30), c(0xFF10131F)), extent = 1f),
+            Bokeh(
+                listOf(c(0xFFFFD98A), c(0xFFFF9EC4), c(0xFF8FB4FF), c(0xFF9EE0D0)),
+                count = 16, bandTop = 0.2f, bandBottom = 0.8f,
+            ),
+            LightBox(glow = c(0x33FFE7C0), x = 0.86f, y = 0.5f, w = 0.06f, h = 0.9f, face = listOf(c(0xFF20222E), c(0xFF16181F))),
+            Particles(FIREFLIES, color = c(0xFFFFE7B0), count = 4),
+        ),
+    )
+
     /** Wave 1. Later waves append here; ids are forever. */
     val ALL: List<SceneSpec> = listOf(
         ROLLING_HILLS, TERRACE_GOLD, RIVER_BEND, BLOSSOM_DRIFT, SUMMER_FIELDS,
@@ -371,6 +496,8 @@ object SceneCatalog {
         WIRES_AT_SUNSET, OVERPASS, ROOFTOP_STATIC, BLUE_HOUR_BANK, VANISHING_LINE,
         STAR_DRIFT, NEBULA_DRIFT, RING_RISE, COMET_ROAD, WARP_JUMP,
         NEON_DINER, TWIN_SUN_DESERT, ASTEROID_DRIFT, AURORA_PLANET, ORBIT_CITY,
+        NEON_ALLEY, ROOFTOP_SKYLINE, LAST_TRAIN, VENDING_GLOW, BACKSTREET_LANTERNS,
+        RAIN_ON_GLASS, HIGHWAY_RIBBON, HARBOR_DUSK, CROSSWALK_NEON, WINDOW_BOKEH,
     )
 
     private val byId = ALL.associateBy { it.id }
