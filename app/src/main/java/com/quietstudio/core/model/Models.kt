@@ -44,7 +44,43 @@ data class SubtitleStyle(
     val marginYPct: Float = 8f,
     val allCaps: Boolean = false,
     val maxWordsPerLine: Int = 5,
-)
+    /**
+     * Free caption placement: the caption block's centre as fractions of the
+     * frame (0..1 each). Negative means "not set", and the legacy [position]
+     * enum drives layout instead — so projects saved before this field
+     * existed keep their captions exactly where they were.
+     */
+    val posX: Float = -1f,
+    val posY: Float = -1f,
+    /** Line justification within the caption block: LEFT | CENTER | RIGHT. */
+    val justify: String = "CENTER",
+) {
+    val hasCustomPosition: Boolean get() = posX in 0f..1f && posY in 0f..1f
+
+    /**
+     * Where the block's centre sits, custom or derived from the legacy enum.
+     * Single source of truth used by the drag UI, the preset chips, the
+     * preview painter and the export painter — they cannot disagree.
+     */
+    fun anchor(): Pair<Float, Float> =
+        if (hasCustomPosition) posX to posY
+        else 0.5f to when (
+            runCatching { SubtitlePosition.valueOf(position) }.getOrDefault(SubtitlePosition.CENTER)
+        ) {
+            SubtitlePosition.TOP -> ANCHOR_TOP_Y
+            SubtitlePosition.CENTER -> 0.5f
+            SubtitlePosition.BOTTOM -> ANCHOR_LOWER_THIRD_Y
+        }
+
+    companion object {
+        const val ANCHOR_TOP_Y = 0.18f
+        const val ANCHOR_LOWER_THIRD_Y = 0.78f
+
+        /** How close to the frame edge the block centre may be dragged. */
+        const val POS_MIN = 0.05f
+        const val POS_MAX = 0.95f
+    }
+}
 
 /* ------------------------------- visuals -------------------------------- */
 

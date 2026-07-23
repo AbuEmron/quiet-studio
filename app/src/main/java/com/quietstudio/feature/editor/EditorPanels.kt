@@ -71,6 +71,7 @@ import com.quietstudio.core.model.SceneryThemes
 import com.quietstudio.core.model.SubtitleAnimation
 import com.quietstudio.core.model.SubtitleCue
 import com.quietstudio.core.model.SubtitlePosition
+import com.quietstudio.core.model.SubtitleStyle
 import com.quietstudio.feature.music.TrackArt
 import com.quietstudio.ui.components.ConfirmDot
 import com.quietstudio.ui.theme.CardHigh
@@ -244,6 +245,17 @@ private fun CaptionsStyleTab(content: ProjectContent, vm: EditorViewModel) {
             }
         }
         item {
+            // Presets write the same normalized anchor the drag gesture writes,
+            // so chips, drag, preview and export all share one coordinate.
+            // A custom-dragged spot away from the presets selects no chip.
+            val anchorPos = s.anchor()
+            val selectedPreset = when {
+                anchorPos.first != 0.5f -> ""
+                anchorPos.second == SubtitleStyle.ANCHOR_TOP_Y -> SubtitlePosition.TOP.name
+                anchorPos.second == 0.5f -> SubtitlePosition.CENTER.name
+                anchorPos.second == SubtitleStyle.ANCHOR_LOWER_THIRD_Y -> SubtitlePosition.BOTTOM.name
+                else -> ""
+            }
             SettingRow("Position") {
                 Segmented(
                     listOf(
@@ -251,8 +263,29 @@ private fun CaptionsStyleTab(content: ProjectContent, vm: EditorViewModel) {
                         SubtitlePosition.CENTER.name to "Mid",
                         SubtitlePosition.BOTTOM.name to "Low",
                     ),
-                    s.position,
-                ) { vm.updateStyle(s.copy(position = it)) }
+                    selectedPreset,
+                ) { key ->
+                    val y = when (key) {
+                        SubtitlePosition.TOP.name -> SubtitleStyle.ANCHOR_TOP_Y
+                        SubtitlePosition.BOTTOM.name -> SubtitleStyle.ANCHOR_LOWER_THIRD_Y
+                        else -> 0.5f
+                    }
+                    vm.updateStyle(s.copy(position = key, posX = 0.5f, posY = y))
+                }
+            }
+            Text(
+                "Or drag the caption anywhere on the preview.",
+                style = MaterialTheme.typography.labelSmall,
+                color = TextSecondary,
+                modifier = Modifier.padding(horizontal = 20.dp),
+            )
+        }
+        item {
+            SettingRow("Justify") {
+                Segmented(
+                    listOf("LEFT" to "Left", "CENTER" to "Center", "RIGHT" to "Right"),
+                    s.justify,
+                ) { vm.updateStyle(s.copy(justify = it)) }
             }
         }
         item {

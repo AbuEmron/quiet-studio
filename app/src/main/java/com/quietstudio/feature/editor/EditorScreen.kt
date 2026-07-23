@@ -3,6 +3,7 @@ package com.quietstudio.feature.editor
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -53,6 +54,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -71,6 +73,7 @@ import com.quietstudio.core.media.SceneRenderer
 import com.quietstudio.core.media.SubtitlePainter
 import com.quietstudio.core.model.BackgroundKind
 import com.quietstudio.core.model.ProjectContent
+import com.quietstudio.core.model.SubtitleStyle
 import com.quietstudio.ui.components.SheetHeader
 import com.quietstudio.ui.theme.CardHigh
 import com.quietstudio.ui.theme.QuietGradients
@@ -158,6 +161,7 @@ fun EditorScreen(
                             content = previewContent,
                             positionMs = ui.positionMs,
                             durationMs = ui.durationMs,
+                            onStyleChange = viewModel::updateStyle,
                             modifier = Modifier
                                 .fillMaxSize()
                                 .pointerInput(Unit) {
@@ -496,6 +500,8 @@ fun PreviewSurface(
     positionMs: Long,
     durationMs: Long,
     modifier: Modifier = Modifier,
+    /** When set, the caption block becomes draggable and placement is reported here. */
+    onStyleChange: ((SubtitleStyle) -> Unit)? = null,
 ) {
     val context = LocalContext.current
     val renderer = remember { SceneRenderer(540, 960) }
@@ -514,7 +520,51 @@ fun PreviewSurface(
         android.graphics.Bitmap.createBitmap(540, 960, android.graphics.Bitmap.Config.ARGB_8888)
     }
     val cv = remember { android.graphics.Canvas(bmp) }
-    Canvas(modifier.background(Color.Black)) {
+
+    // ── Free caption placement ──────────────────────────────────────────────
+    // Dragging moves the caption block's normalized centre (0..1 fractions of
+    // the frame). The same fractions feed SubtitlePainter in this preview and
+    // in the export overlay, so where you drop it is where it burns in.
+    var dragging by remember { mutableStateOf(false) }
+    var dragPos by remember { mutableStateOf(0.5f to 0.5f) }
+
+    fun snap(v: Float, targets: List<Float>): Float =
+        targets.firstOrNull { kotlin.math.abs(v - it) < SNAP_EPS } ?: v
+
+    // rememberUpdatedState: the pointerInput block is long-lived, but style
+    // edits keep arriving from the sheet — copying from a stale capture here
+    // would silently revert them mid-drag.
+    val liveStyle by rememberUpdatedState(content.subtitleStyle)
+    val dragModifier = if (onStyleChange == null) Modifier else Modifier.pointerInput(Unit) {
+        detectDragGestures(
+            onDragStart = {
+                dragPos = liveStyle.anchor()
+                dragging = true
+            },
+            onDrag = { change, amount ->
+                change.consume()
+                val (px, py) = dragPos
+                dragPos =
+                    (px + amount.x / size.width).coerceIn(SubtitleStyle.POS_MIN, SubtitleStyle.POS_MAX) to
+                    (py + amount.y / size.height).coerceIn(SubtitleStyle.POS_MIN, SubtitleStyle.POS_MAX)
+                onStyleChange(
+                    liveStyle.copy(
+                        posX = snap(dragPos.first, listOf(0.5f)),
+                        posY = snap(
+                            dragPos.second,
+                            listOf(
+                                SubtitleStyle.ANCHOR_TOP_Y, 0.5f, SubtitleStyle.ANCHOR_LOWER_THIRD_Y,
+                            ),
+                        ),
+                    )
+                )
+            },
+            onDragEnd = { dragging = false },
+            onDragCancel = { dragging = false },
+        )
+    }
+
+    Canvas(modifier.background(Color.Black).then(dragModifier)) {
         cv.drawColor(android.graphics.Color.BLACK)
         renderer.drawFrame(cv, content.visual, positionMs, durationMs)
         subtitles.draw(cv, content.cues, content.subtitleStyle, positionMs)
@@ -522,8 +572,36 @@ fun PreviewSurface(
             bmp, null,
             android.graphics.RectF(0f, 0f, size.width, size.height), null,
         )
+
+        // Alignment guides while dragging: centre lines light up when snapped,
+        // and the three preset heights show as faint dashes.
+        if (dragging) {
+            val (ax, ay) = content.subtitleStyle.anchor()
+            val guide = Color(0x66FFFFFF)
+            val snapped = Color(0xCC9D7DFF)
+            val dash = androidx.compose.ui.graphics.PathEffect.dashPathEffect(floatArrayOf(14f, 10f))
+            drawLine(
+                color = if (kotlin.math.abs(ax - 0.5f) < 0.001f) snapped else guide,
+                start = androidx.compose.ui.geometry.Offset(size.width / 2f, 0f),
+                end = androidx.compose.ui.geometry.Offset(size.width / 2f, size.height),
+                strokeWidth = 2f, pathEffect = dash,
+            )
+            listOf(
+                SubtitleStyle.ANCHOR_TOP_Y, 0.5f, SubtitleStyle.ANCHOR_LOWER_THIRD_Y,
+            ).forEach { fy ->
+                drawLine(
+                    color = if (kotlin.math.abs(ay - fy) < 0.001f) snapped else guide,
+                    start = androidx.compose.ui.geometry.Offset(0f, size.height * fy),
+                    end = androidx.compose.ui.geometry.Offset(size.width, size.height * fy),
+                    strokeWidth = 2f, pathEffect = dash,
+                )
+            }
+        }
     }
 }
+
+/** How close (in frame fractions) a drag must get before snapping to a guide. */
+private const val SNAP_EPS = 0.025f
 
 internal fun fmt(ms: Long): String {
     val s = ms / 1000

@@ -106,27 +106,53 @@ class SubtitlePainter(
         val lineH = textPaint.fontSpacing * 1.08f
         val blockH = lineH * lines.size
         val marginY = height * (style.marginYPct / 100f)
-        val baseY = when (
-            runCatching { SubtitlePosition.valueOf(style.position) }.getOrDefault(SubtitlePosition.CENTER)
-        ) {
-            SubtitlePosition.TOP -> marginY + lineH
-            SubtitlePosition.CENTER -> height / 2f - blockH / 2f + lineH * 0.8f
-            SubtitlePosition.BOTTOM -> height - marginY - blockH + lineH * 0.8f
-        } + dy * height / 1920f
+
+        var maxW = 0f
+        for (l in lines) maxW = maxOf(maxW, textPaint.measureText(l))
+        val padX = sizePx * 0.7f
+        val padY = sizePx * 0.5f
+
+        // ── Placement ───────────────────────────────────────────────────────
+        // Custom (posX, posY) is the block's CENTRE in frame fractions; the
+        // legacy enum path is untouched so old projects render byte-for-byte
+        // where they always did. Both preview and export call this method with
+        // their own width/height, so the fraction maths agrees by construction.
+        var cx = width / 2f
+        var baseY: Float
+        if (style.hasCustomPosition) {
+            // Never let the block leave the frame: clamp the centre so text
+            // (plus the pill, when shown) stays inside a safe margin.
+            val safe = width * SAFE_MARGIN_FRAC
+            val halfW = maxW / 2f + if (style.backgroundPill) padX else 0f
+            cx = if (halfW * 2f > width - 2f * safe) width / 2f
+            else (style.posX * width).coerceIn(safe + halfW, width - safe - halfW)
+
+            val vPad = if (style.backgroundPill) padY * 0.4f else 0f
+            val topLimit = height * SAFE_MARGIN_FRAC + vPad + blockH / 2f
+            val bottomLimit = height - height * SAFE_MARGIN_FRAC - vPad - blockH / 2f
+            val cy = (style.posY * height).coerceIn(
+                topLimit, maxOf(topLimit, bottomLimit),
+            )
+            baseY = cy - blockH / 2f + lineH * 0.8f + dy * height / 1920f
+        } else {
+            baseY = when (
+                runCatching { SubtitlePosition.valueOf(style.position) }.getOrDefault(SubtitlePosition.CENTER)
+            ) {
+                SubtitlePosition.TOP -> marginY + lineH
+                SubtitlePosition.CENTER -> height / 2f - blockH / 2f + lineH * 0.8f
+                SubtitlePosition.BOTTOM -> height - marginY - blockH + lineH * 0.8f
+            } + dy * height / 1920f
+        }
 
         val a255 = (alpha * 255).toInt().coerceIn(0, 255)
 
         if (style.backgroundPill) {
-            var maxW = 0f
-            for (l in lines) maxW = maxOf(maxW, textPaint.measureText(l))
             pillPaint.color = 0xFF17171E.toInt()
             pillPaint.alpha = (alpha * style.backgroundOpacity.coerceIn(0f, 1f) * 255).toInt()
-            val padX = sizePx * 0.7f
-            val padY = sizePx * 0.5f
             canvas.drawRoundRect(
                 RectF(
-                    width / 2f - maxW / 2f - padX, baseY - lineH * 0.95f - padY * 0.4f,
-                    width / 2f + maxW / 2f + padX, baseY + blockH - lineH * 0.6f + padY * 0.4f,
+                    cx - maxW / 2f - padX, baseY - lineH * 0.95f - padY * 0.4f,
+                    cx + maxW / 2f + padX, baseY + blockH - lineH * 0.6f + padY * 0.4f,
                 ),
                 sizePx * 0.45f, sizePx * 0.45f, pillPaint,
             )
@@ -143,7 +169,11 @@ class SubtitlePainter(
             val words = line.split(" ")
             val spaceW = textPaint.measureText(" ")
             val lineW = textPaint.measureText(line)
-            var x = width / 2f - lineW / 2f
+            val x = when (style.justify) {
+                "LEFT" -> cx - maxW / 2f
+                "RIGHT" -> cx + maxW / 2f - lineW
+                else -> cx - lineW / 2f
+            }
 
             if (animation == SubtitleAnimation.KARAOKE) {
                 // dim pass then clipped bright pass over the whole line
@@ -208,6 +238,11 @@ class SubtitlePainter(
             if (cur.isNotEmpty()) out.add(cur.toString())
         }
         return out
+    }
+
+    companion object {
+        /** Fraction of the frame kept clear around a custom-placed block. */
+        const val SAFE_MARGIN_FRAC = 0.03f
     }
 
     private fun ease(k: Float) = 1f - (1f - k) * (1f - k) * (1f - k)
