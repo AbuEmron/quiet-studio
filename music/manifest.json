@@ -1,0 +1,682 @@
+{
+  "version": 1,
+  "tracks": [
+    {
+      "id": "qs101",
+      "title": "Amber Hour",
+      "mood": "Reflective",
+      "tags": [
+        "lofi",
+        "soulful",
+        "chill"
+      ],
+      "bpm": 72,
+      "key": "F major",
+      "energy": 2,
+      "durationSec": 53.333,
+      "file": "music/qs101.ogg",
+      "loop": true,
+      "lufs": -16.0,
+      "instruments": [
+        "keys",
+        "pad",
+        "bass",
+        "drums",
+        "melody"
+      ]
+    },
+    {
+      "id": "qs102",
+      "title": "Paper Lanterns",
+      "mood": "Calm",
+      "tags": [
+        "lofi",
+        "minimal",
+        "atmospheric"
+      ],
+      "bpm": 68,
+      "key": "D dorian",
+      "energy": 1,
+      "durationSec": 56.471,
+      "file": "music/qs102.ogg",
+      "loop": true,
+      "lufs": -16.0,
+      "instruments": [
+        "keys",
+        "pad",
+        "bass"
+      ]
+    },
+    {
+      "id": "qs103",
+      "title": "Slow Orbit",
+      "mood": "Deep Focus",
+      "tags": [
+        "ambient",
+        "minimal",
+        "focus"
+      ],
+      "bpm": 60,
+      "key": "A lydian",
+      "energy": 1,
+      "durationSec": 64.0,
+      "file": "music/qs103.ogg",
+      "loop": true,
+      "lufs": -16.0,
+      "instruments": [
+        "pad",
+        "bass",
+        "melody"
+      ]
+    },
+    {
+      "id": "qs104",
+      "title": "Night Ferry",
+      "mood": "Late Night",
+      "tags": [
+        "jazz",
+        "lofi",
+        "hiphop"
+      ],
+      "bpm": 66,
+      "key": "Eb minor",
+      "energy": 2,
+      "durationSec": 58.182,
+      "file": "music/qs104.ogg",
+      "loop": true,
+      "lufs": -16.0,
+      "instruments": [
+        "keys",
+        "pad",
+        "bass",
+        "drums"
+      ]
+    },
+    {
+      "id": "qs105",
+      "title": "Morning Salt",
+      "mood": "Uplifting",
+      "tags": [
+        "chill",
+        "fusion",
+        "hopeful"
+      ],
+      "bpm": 88,
+      "key": "G major",
+      "energy": 3,
+      "durationSec": 43.636,
+      "file": "music/qs105.ogg",
+      "loop": true,
+      "lufs": -16.0,
+      "instruments": [
+        "keys",
+        "bass",
+        "drums",
+        "melody"
+      ]
+    },
+    {
+      "id": "qs106",
+      "title": "Quiet Machinery",
+      "mood": "Creative",
+      "tags": [
+        "hiphop",
+        "boombap",
+        "focus"
+      ],
+      "bpm": 84,
+      "key": "A minor",
+      "energy": 3,
+      "durationSec": 45.714,
+      "file": "music/qs106.ogg",
+      "loop": true,
+      "lufs": -16.0,
+      "instruments": [
+        "keys",
+        "bass",
+        "drums"
+      ]
+    },
+    {
+      "id": "qs107",
+      "title": "Glass Garden",
+      "mood": "Peaceful",
+      "tags": [
+        "ambient",
+        "atmospheric",
+        "minimal"
+      ],
+      "bpm": 62,
+      "key": "Db major",
+      "energy": 1,
+      "durationSec": 61.935,
+      "file": "music/qs107.ogg",
+      "loop": true,
+      "lufs": -16.0,
+      "instruments": [
+        "pad",
+        "melody"
+      ]
+    },
+    {
+      "id": "qs108",
+      "title": "Vellum",
+      "mood": "Documentary",
+      "tags": [
+        "cinematic",
+        "emotional",
+        "minimal"
+      ],
+      "bpm": 70,
+      "key": "C minor",
+      "energy": 2,
+      "durationSec": 54.857,
+      "file": "music/qs108.ogg",
+      "loop": true,
+      "lufs": -16.0,
+      "instruments": [
+        "keys",
+        "pad",
+        "bass"
+      ]
+    },
+    {
+      "id": "qs109",
+      "title": "Warm Static",
+      "mood": "Chill",
+      "tags": [
+        "lofi",
+        "psychedelic",
+        "chill"
+      ],
+      "bpm": 74,
+      "key": "Bb dorian",
+      "energy": 2,
+      "durationSec": 51.892,
+      "file": "music/qs109.ogg",
+      "loop": true,
+      "lufs": -16.0,
+      "instruments": [
+        "keys",
+        "pad",
+        "bass",
+        "drums",
+        "melody"
+      ]
+    },
+    {
+      "id": "qs110",
+      "title": "Longhand",
+      "mood": "Deep Thinking",
+      "tags": [
+        "jazz",
+        "soulful",
+        "focus"
+      ],
+      "bpm": 64,
+      "key": "F dorian",
+      "energy": 2,
+      "durationSec": 60.0,
+      "file": "music/qs110.ogg",
+      "loop": true,
+      "lufs": -16.0,
+      "instruments": [
+        "keys",
+        "bass",
+        "drums"
+      ]
+    },
+    {
+      "id": "qs111",
+      "title": "Kite Weather",
+      "mood": "Hopeful",
+      "tags": [
+        "fusion",
+        "uplifting",
+        "chill"
+      ],
+      "bpm": 92,
+      "key": "D major",
+      "energy": 3,
+      "durationSec": 41.739,
+      "file": "music/qs111.ogg",
+      "loop": true,
+      "lufs": -16.0,
+      "instruments": [
+        "keys",
+        "bass",
+        "drums",
+        "melody"
+      ]
+    },
+    {
+      "id": "qs112",
+      "title": "Low Tide Study",
+      "mood": "Deep Focus",
+      "tags": [
+        "minimal",
+        "ambient",
+        "focus"
+      ],
+      "bpm": 58,
+      "key": "G major",
+      "energy": 1,
+      "durationSec": 66.207,
+      "file": "music/qs112.ogg",
+      "loop": true,
+      "lufs": -16.0,
+      "instruments": [
+        "pad",
+        "bass"
+      ]
+    },
+    {
+      "id": "qs113",
+      "title": "Copper Dusk",
+      "mood": "Late Night",
+      "tags": [
+        "soulful",
+        "jazz",
+        "emotional"
+      ],
+      "bpm": 69,
+      "key": "Ab minor",
+      "energy": 2,
+      "durationSec": 55.652,
+      "file": "music/qs113.ogg",
+      "loop": true,
+      "lufs": -16.0,
+      "instruments": [
+        "keys",
+        "pad",
+        "bass",
+        "drums"
+      ]
+    },
+    {
+      "id": "qs114",
+      "title": "Small Hours",
+      "mood": "Late Night",
+      "tags": [
+        "lofi",
+        "minimal",
+        "chill"
+      ],
+      "bpm": 63,
+      "key": "E minor",
+      "energy": 1,
+      "durationSec": 60.952,
+      "file": "music/qs114.ogg",
+      "loop": true,
+      "lufs": -16.0,
+      "instruments": [
+        "keys",
+        "bass"
+      ]
+    },
+    {
+      "id": "qs115",
+      "title": "Bloom Cycle",
+      "mood": "Inspirational",
+      "tags": [
+        "cinematic",
+        "uplifting",
+        "emotional"
+      ],
+      "bpm": 76,
+      "key": "C major",
+      "energy": 3,
+      "durationSec": 50.526,
+      "file": "music/qs115.ogg",
+      "loop": true,
+      "lufs": -16.0,
+      "instruments": [
+        "keys",
+        "pad",
+        "bass",
+        "drums",
+        "melody"
+      ]
+    },
+    {
+      "id": "qs116",
+      "title": "Ink & Water",
+      "mood": "Creative",
+      "tags": [
+        "jazz",
+        "lofi",
+        "psychedelic"
+      ],
+      "bpm": 78,
+      "key": "Bb dorian",
+      "energy": 3,
+      "durationSec": 49.231,
+      "file": "music/qs116.ogg",
+      "loop": true,
+      "lufs": -16.0,
+      "instruments": [
+        "keys",
+        "bass",
+        "drums",
+        "melody"
+      ]
+    },
+    {
+      "id": "qs117",
+      "title": "Field Notes",
+      "mood": "Documentary",
+      "tags": [
+        "cinematic",
+        "minimal",
+        "focus"
+      ],
+      "bpm": 72,
+      "key": "D mixolydian",
+      "energy": 2,
+      "durationSec": 53.333,
+      "file": "music/qs117.ogg",
+      "loop": true,
+      "lufs": -16.0,
+      "instruments": [
+        "keys",
+        "pad",
+        "bass",
+        "drums"
+      ]
+    },
+    {
+      "id": "qs118",
+      "title": "Sunprint",
+      "mood": "Uplifting",
+      "tags": [
+        "soulful",
+        "fusion",
+        "hopeful"
+      ],
+      "bpm": 85,
+      "key": "Eb major",
+      "energy": 3,
+      "durationSec": 45.176,
+      "file": "music/qs118.ogg",
+      "loop": true,
+      "lufs": -16.0,
+      "instruments": [
+        "keys",
+        "bass",
+        "drums",
+        "melody"
+      ]
+    },
+    {
+      "id": "qs119",
+      "title": "Attic Light",
+      "mood": "Reflective",
+      "tags": [
+        "lofi",
+        "emotional",
+        "chill"
+      ],
+      "bpm": 70,
+      "key": "A major",
+      "energy": 2,
+      "durationSec": 54.857,
+      "file": "music/qs119.ogg",
+      "loop": true,
+      "lufs": -16.0,
+      "instruments": [
+        "keys",
+        "pad",
+        "bass",
+        "drums"
+      ]
+    },
+    {
+      "id": "qs120",
+      "title": "Undercurrent",
+      "mood": "Deep Thinking",
+      "tags": [
+        "ambient",
+        "psychedelic",
+        "focus"
+      ],
+      "bpm": 61,
+      "key": "F minor",
+      "energy": 1,
+      "durationSec": 62.951,
+      "file": "music/qs120.ogg",
+      "loop": true,
+      "lufs": -16.0,
+      "instruments": [
+        "pad",
+        "bass",
+        "melody"
+      ]
+    },
+    {
+      "id": "qs121",
+      "title": "Terracotta",
+      "mood": "Soulful",
+      "tags": [
+        "soulful",
+        "jazz",
+        "hiphop"
+      ],
+      "bpm": 80,
+      "key": "G dorian",
+      "energy": 3,
+      "durationSec": 48.0,
+      "file": "music/qs121.ogg",
+      "loop": true,
+      "lufs": -16.0,
+      "instruments": [
+        "keys",
+        "bass",
+        "drums",
+        "melody"
+      ]
+    },
+    {
+      "id": "qs122",
+      "title": "First Light Loop",
+      "mood": "Morning Energy",
+      "tags": [
+        "hopeful",
+        "chill",
+        "fusion"
+      ],
+      "bpm": 96,
+      "key": "C lydian",
+      "energy": 3,
+      "durationSec": 40.0,
+      "file": "music/qs122.ogg",
+      "loop": true,
+      "lufs": -16.0,
+      "instruments": [
+        "keys",
+        "bass",
+        "drums",
+        "melody"
+      ]
+    },
+    {
+      "id": "qs123",
+      "title": "Winter Radio",
+      "mood": "Calm",
+      "tags": [
+        "lofi",
+        "minimal",
+        "emotional"
+      ],
+      "bpm": 65,
+      "key": "Db major",
+      "energy": 1,
+      "durationSec": 59.077,
+      "file": "music/qs123.ogg",
+      "loop": true,
+      "lufs": -16.0,
+      "instruments": [
+        "keys",
+        "pad"
+      ]
+    },
+    {
+      "id": "qs124",
+      "title": "Open Window",
+      "mood": "Peaceful",
+      "tags": [
+        "ambient",
+        "chill",
+        "atmospheric"
+      ],
+      "bpm": 66,
+      "key": "E major",
+      "energy": 1,
+      "durationSec": 58.182,
+      "file": "music/qs124.ogg",
+      "loop": true,
+      "lufs": -16.0,
+      "instruments": [
+        "pad",
+        "melody",
+        "bass"
+      ]
+    },
+    {
+      "id": "qs125",
+      "title": "Marginalia",
+      "mood": "Creative",
+      "tags": [
+        "jazz",
+        "hiphop",
+        "focus"
+      ],
+      "bpm": 82,
+      "key": "B dorian",
+      "energy": 3,
+      "durationSec": 46.829,
+      "file": "music/qs125.ogg",
+      "loop": true,
+      "lufs": -16.0,
+      "instruments": [
+        "keys",
+        "bass",
+        "drums"
+      ]
+    },
+    {
+      "id": "qs126",
+      "title": "Slow Cartography",
+      "mood": "Documentary",
+      "tags": [
+        "cinematic",
+        "emotional",
+        "minimal"
+      ],
+      "bpm": 68,
+      "key": "A minor",
+      "energy": 2,
+      "durationSec": 56.471,
+      "file": "music/qs126.ogg",
+      "loop": true,
+      "lufs": -16.0,
+      "instruments": [
+        "keys",
+        "pad",
+        "bass",
+        "drums"
+      ]
+    },
+    {
+      "id": "qs127",
+      "title": "Honey & Smoke",
+      "mood": "Soulful",
+      "tags": [
+        "soulful",
+        "lofi",
+        "emotional"
+      ],
+      "bpm": 73,
+      "key": "Bb major",
+      "energy": 2,
+      "durationSec": 52.603,
+      "file": "music/qs127.ogg",
+      "loop": true,
+      "lufs": -16.0,
+      "instruments": [
+        "keys",
+        "pad",
+        "bass",
+        "drums"
+      ]
+    },
+    {
+      "id": "qs128",
+      "title": "Clear Pool",
+      "mood": "Deep Focus",
+      "tags": [
+        "minimal",
+        "ambient",
+        "focus"
+      ],
+      "bpm": 57,
+      "key": "D major",
+      "energy": 1,
+      "durationSec": 67.368,
+      "file": "music/qs128.ogg",
+      "loop": true,
+      "lufs": -16.0,
+      "instruments": [
+        "pad",
+        "bass"
+      ]
+    },
+    {
+      "id": "qs129",
+      "title": "Golden Ratio",
+      "mood": "Inspirational",
+      "tags": [
+        "fusion",
+        "uplifting",
+        "cinematic"
+      ],
+      "bpm": 90,
+      "key": "F lydian",
+      "energy": 3,
+      "durationSec": 42.667,
+      "file": "music/qs129.ogg",
+      "loop": true,
+      "lufs": -16.0,
+      "instruments": [
+        "keys",
+        "pad",
+        "bass",
+        "drums",
+        "melody"
+      ]
+    },
+    {
+      "id": "qs130",
+      "title": "Afterglow Motel",
+      "mood": "Late Night",
+      "tags": [
+        "psychedelic",
+        "lofi",
+        "chill"
+      ],
+      "bpm": 67,
+      "key": "Gb dorian",
+      "energy": 2,
+      "durationSec": 57.313,
+      "file": "music/qs130.ogg",
+      "loop": true,
+      "lufs": -16.0,
+      "instruments": [
+        "keys",
+        "pad",
+        "bass",
+        "drums",
+        "melody"
+      ]
+    }
+  ]
+}

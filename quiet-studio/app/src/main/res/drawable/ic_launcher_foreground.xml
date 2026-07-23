@@ -1,0 +1,12 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Minimal waveform mark -->
+    <path android:fillColor="#E8C9A0" android:pathData="M34,46h4v16h-4z" />
+    <path android:fillColor="#E8C9A0" android:pathData="M42,38h4v32h-4z" />
+    <path android:fillColor="#F2E6D8" android:pathData="M50,30h4v48h-4z" />
+    <path android:fillColor="#E8C9A0" android:pathData="M58,40h4v28h-4z" />
+    <path android:fillColor="#E8C9A0" android:pathData="M66,48h4v12h-4z" />
+</vector>
