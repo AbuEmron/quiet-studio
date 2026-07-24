@@ -17,8 +17,8 @@ android {
         applicationId = "com.quietstudio"
         minSdk = 26
         targetSdk = 35
-        versionCode = 16
-        versionName = "1.13"
+        versionCode = 17
+        versionName = "1.14"
 
         vectorDrawables { useSupportLibrary = true }
         buildConfigField("boolean", "WHISPER_ENABLED", enableWhisper.toString())

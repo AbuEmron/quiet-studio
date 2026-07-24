@@ -178,13 +178,27 @@ fun CameraScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                // Flip
-                Box(
-                    Modifier.size(52.dp).background(Color(0x22FFFFFF), CircleShape)
-                        .clickable(enabled = capture.canFlip && !ui.recording) { frontLens = !frontLens },
-                    contentAlignment = Alignment.Center,
+                // Flip — labelled so it's obviously a front/rear toggle, and it
+                // shows which camera is live.
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.size(64.dp),
                 ) {
-                    Icon(Icons.Rounded.Cameraswitch, "Flip camera", tint = Color.White, modifier = Modifier.size(24.dp))
+                    Box(
+                        Modifier.size(52.dp).background(Color(0x22FFFFFF), CircleShape)
+                            .clickable(enabled = capture.canFlip && !ui.recording) { frontLens = !frontLens },
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Icon(
+                            Icons.Rounded.Cameraswitch, "Switch front/rear camera",
+                            tint = Color.White, modifier = Modifier.size(26.dp),
+                        )
+                    }
+                    Text(
+                        if (frontLens) "Front" else "Rear",
+                        style = MaterialTheme.typography.labelSmall, color = Color.White,
+                        modifier = Modifier.padding(top = 2.dp),
+                    )
                 }
 
                 // Record / stop
@@ -210,7 +224,7 @@ fun CameraScreen(
                     }
                 }
 
-                Box(Modifier.size(52.dp)) // spacer to balance the flip button
+                Box(Modifier.size(64.dp)) // spacer to balance the flip control
             }
         }
     }

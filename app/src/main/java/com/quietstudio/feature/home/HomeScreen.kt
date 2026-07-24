@@ -129,8 +129,31 @@ fun HomeScreen(
                 )
                 Spacer(Modifier.height(30.dp))
                 GlowMicButton(size = 112.dp, onClick = onRecord)
+                Spacer(Modifier.height(14.dp))
+                Text("Tap to record voice", style = MaterialTheme.typography.titleMedium, color = Color.White)
+                Text(
+                    "Narrate your story",
+                    style = MaterialTheme.typography.labelMedium, color = Color.White.copy(alpha = 0.7f),
+                )
+
                 Spacer(Modifier.height(18.dp))
-                Text("Tap to Record", style = MaterialTheme.typography.titleMedium, color = Color.White)
+                // Clearly distinct from the mic: a labelled camera pill that
+                // opens the video recorder (front & rear).
+                Row(
+                    Modifier
+                        .clip(RoundedCornerShape(30.dp))
+                        .background(Color.White.copy(alpha = 0.16f))
+                        .clickable { onCamera() }
+                        .padding(horizontal = 20.dp, vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(Icons.Rounded.Videocam, null, tint = Color.White, modifier = Modifier.size(22.dp))
+                    Spacer(Modifier.width(10.dp))
+                    Text(
+                        "Record Video",
+                        style = MaterialTheme.typography.titleSmall, color = Color.White,
+                    )
+                }
             }
         }
 
@@ -144,7 +167,7 @@ fun HomeScreen(
                 .padding(vertical = 14.dp),
             horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
-            QuickNav(Icons.Rounded.Videocam, "Record", onCamera)
+            QuickNav(Icons.Rounded.Videocam, "Video", onCamera)
             QuickNav(Icons.Rounded.Folder, "Projects", onProjects)
             QuickNav(Icons.Rounded.MusicNote, "Music", onMusic)
             QuickNav(Icons.Rounded.Wallpaper, "Visuals", onVisuals)
