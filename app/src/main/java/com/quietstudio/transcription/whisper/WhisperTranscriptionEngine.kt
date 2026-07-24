@@ -9,6 +9,7 @@ import com.quietstudio.transcription.CueSegmenter
 import com.quietstudio.transcription.TranscriptionEngine
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
 import java.io.File
 import javax.inject.Inject
@@ -56,11 +57,16 @@ class WhisperTranscriptionEngine @Inject constructor(
         val pcm16k = MediaDecode.resampleLinear(pcm, wav.sampleRate, 16000)
         onProgress(0.15f)
 
+        // Bail before the expensive native call if the job was already cancelled.
+        ensureActive()
         val ctx = WhisperBridge.initContext(model.absolutePath)
         if (ctx == 0L) return@withContext Result.failure(IllegalStateException("Failed to load model"))
         try {
             val threads = Runtime.getRuntime().availableProcessors().coerceIn(2, 6)
             val raw = WhisperBridge.transcribe(ctx, pcm16k, "auto", threads)
+            // The native call can't be interrupted mid-flight; if we were
+            // cancelled while it ran, stop here and free the context.
+            ensureActive()
             onProgress(0.9f)
             val segments = raw.lineSequence()
                 .filter { it.isNotBlank() }

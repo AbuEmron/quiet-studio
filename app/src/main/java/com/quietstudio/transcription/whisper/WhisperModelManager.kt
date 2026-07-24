@@ -44,27 +44,28 @@ class WhisperModelManager @Inject constructor(
          * the decode cost — the practical accuracy ceiling for on-device.
          * q5_0 keeps the download and RAM footprint workable on a phone.
          */
+        val BASE = ModelSpec(
+            id = "base",
+            label = "Whisper Base",
+            fileName = "ggml-base.bin",
+            url = "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base.bin",
+            approxSizeMb = 148,
+            note = "Fast · finishes auto-subtitles quickly · recommended",
+            recommended = true,
+        )
+
         val TURBO = ModelSpec(
             id = "turbo",
             label = "Whisper large-v3-turbo (q5_0)",
             fileName = "ggml-large-v3-turbo-q5_0.bin",
             url = "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-large-v3-turbo-q5_0.bin",
             approxSizeMb = 547,
-            note = "Best accuracy · needs a reasonably recent phone",
-            recommended = true,
-        )
-
-        val BASE = ModelSpec(
-            id = "base",
-            label = "Whisper base",
-            fileName = "ggml-base.bin",
-            url = "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base.bin",
-            approxSizeMb = 148,
-            note = "Light and fast · good for older phones",
+            note = "Higher accuracy · much slower on a phone (can take minutes)",
             recommended = false,
         )
 
-        val CATALOG = listOf(TURBO, BASE)
+        // Base first: it is the fast default new users are offered.
+        val CATALOG = listOf(BASE, TURBO)
 
         const val IMPORTED_MODEL_NAME = "ggml-imported.bin"
         private const val ACTIVE_MARKER = "active-model.txt"

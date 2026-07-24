@@ -39,6 +39,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -81,6 +82,12 @@ import com.quietstudio.ui.theme.QuietGradients
 import com.quietstudio.ui.theme.TextSecondary
 import com.quietstudio.ui.theme.Violet
 import com.quietstudio.ui.theme.VioletSoft
+
+/** "0:07" style elapsed for the transcription progress row. */
+private fun fmtElapsedSec(ms: Long): String {
+    val s = ms / 1000
+    return "%d:%02d".format(s / 60, s % 60)
+}
 
 /* ========================= CAPTIONS (Edit·Style·Animation) ================ */
 
@@ -157,13 +164,50 @@ private fun CaptionsEditTab(content: ProjectContent, ui: EditorViewModel.UiState
                 Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
             ) {
-                PillButton(
-                    if (ui.transcribing) "Transcribing…" else "Auto-generate",
-                    Icons.Rounded.AutoAwesome,
-                    enabled = !ui.transcribing,
-                ) { vm.transcribeNow() }
+                if (ui.transcribing) {
+                    PillButton("Cancel", Icons.Rounded.Close) { vm.cancelTranscription() }
+                } else {
+                    PillButton("Auto-generate", Icons.Rounded.AutoAwesome) { vm.transcribeNow() }
+                }
                 PillButton("Add line", Icons.Rounded.Add) {
                     vm.addCue(content.cues.lastOrNull()?.id)
+                }
+            }
+        }
+        if (ui.transcribing) {
+            item {
+                Column(Modifier.padding(horizontal = 16.dp, vertical = 6.dp)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            ui.transcribeStage.ifBlank { "Transcribing…" },
+                            style = MaterialTheme.typography.labelMedium, color = Color.White,
+                            modifier = Modifier.weight(1f),
+                        )
+                        Text(
+                            fmtElapsedSec(ui.transcribeElapsedMs),
+                            style = MaterialTheme.typography.labelMedium, color = TextSecondary,
+                        )
+                    }
+                    Spacer(Modifier.height(6.dp))
+                    if (ui.transcribeProgress > 0.15f && ui.transcribeProgress < 0.9f) {
+                        // Model is in its opaque phase — show it's alive, not stuck.
+                        LinearProgressIndicator(
+                            Modifier.fillMaxWidth(),
+                            color = Violet, trackColor = CardHigh,
+                        )
+                    } else {
+                        LinearProgressIndicator(
+                            progress = { ui.transcribeProgress.coerceIn(0f, 1f) },
+                            modifier = Modifier.fillMaxWidth(),
+                            color = Violet, trackColor = CardHigh,
+                        )
+                    }
+                    Text(
+                        "Large models can take a few minutes on a phone. You can cancel and " +
+                            "switch to the faster Base model in Settings.",
+                        style = MaterialTheme.typography.labelSmall, color = TextSecondary,
+                        modifier = Modifier.padding(top = 6.dp),
+                    )
                 }
             }
         }

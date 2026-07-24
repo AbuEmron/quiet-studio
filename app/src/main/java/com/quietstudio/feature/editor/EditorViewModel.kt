@@ -34,6 +34,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -42,6 +43,7 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.util.UUID
@@ -80,6 +82,10 @@ class EditorViewModel @Inject constructor(
         val positionMs: Long = 0,
         val durationMs: Long = 1,
         val transcribing: Boolean = false,
+        /** 0..1; -1 while the model works opaquely (indeterminate). */
+        val transcribeProgress: Float = 0f,
+        val transcribeElapsedMs: Long = 0,
+        val transcribeStage: String = "",
         val message: String? = null,
     )
 
@@ -210,21 +216,74 @@ class EditorViewModel @Inject constructor(
         musicLibrary.random()?.let { selectTrack(it) }
     }
 
+    private var transcribeJob: Job? = null
+
     fun transcribeNow() {
         val wav = content.narration.wavPath ?: return
+        if (transcribeJob?.isActive == true) return
         if (!transcription.isAvailable || !transcription.isModelReady()) {
             _ui.value = _ui.value.copy(
-                message = "Add a Whisper model in Settings to auto-generate subtitles."
+                message = "No speech model yet. Add one in Settings — the Base model is small " +
+                    "and fast for auto-subtitles.",
             )
             return
         }
-        viewModelScope.launch {
-            _ui.value = _ui.value.copy(transcribing = true)
-            transcription.transcribe(File(wav), content.subtitleStyle.maxWordsPerLine)
-                .onSuccess { cues -> mutate { it.copy(cues = cues) } }
-                .onFailure { _ui.value = _ui.value.copy(message = it.message) }
-            _ui.value = _ui.value.copy(transcribing = false)
+        transcribeJob = viewModelScope.launch {
+            _ui.value = _ui.value.copy(
+                transcribing = true, transcribeProgress = 0f,
+                transcribeElapsedMs = 0, transcribeStage = "Preparing…",
+            )
+            // Live elapsed timer so a long model run is visibly working, not hung.
+            val start = System.currentTimeMillis()
+            val ticker = launch {
+                while (isActive) {
+                    _ui.value = _ui.value.copy(transcribeElapsedMs = System.currentTimeMillis() - start)
+                    delay(250)
+                }
+            }
+            try {
+                val result = withTimeoutOrNull(TRANSCRIBE_TIMEOUT_MS) {
+                    transcription.transcribe(File(wav), content.subtitleStyle.maxWordsPerLine) { p ->
+                        _ui.value = _ui.value.copy(
+                            transcribeProgress = p,
+                            transcribeStage = when {
+                                p < 0.15f -> "Preparing audio…"
+                                p < 0.9f -> "Transcribing…"
+                                else -> "Finishing…"
+                            },
+                        )
+                    }
+                }
+                when {
+                    result == null ->
+                        _ui.value = _ui.value.copy(
+                            message = "Transcription timed out. Try the faster Base model in " +
+                                "Settings, or a shorter clip.",
+                        )
+                    result.isSuccess -> {
+                        val cues = result.getOrNull().orEmpty()
+                        mutate { it.copy(cues = cues) }
+                        if (cues.isEmpty()) {
+                            _ui.value = _ui.value.copy(message = "No speech detected in the audio.")
+                        }
+                    }
+                    else -> _ui.value = _ui.value.copy(
+                        message = result.exceptionOrNull()?.message ?: "Transcription failed.",
+                    )
+                }
+            } catch (e: CancellationException) {
+                // User cancelled — leave existing cues untouched, no error.
+            } finally {
+                ticker.cancel()
+                _ui.value = _ui.value.copy(transcribing = false, transcribeStage = "")
+            }
         }
+    }
+
+    fun cancelTranscription() {
+        transcribeJob?.cancel()
+        transcribeJob = null
+        _ui.value = _ui.value.copy(transcribing = false, transcribeStage = "")
     }
 
     fun consumeMessage() {
@@ -399,4 +458,14 @@ class EditorViewModel @Inject constructor(
 
     /** Expose content as state for Compose. */
     val contentState: StateFlow<ProjectContent?> = contentFlow.asStateFlow()
+
+    companion object {
+        /**
+         * Safety net so a stuck/pathologically-slow run recovers on its own
+         * rather than spinning forever. Generous — a long clip on the turbo
+         * model is legitimately minutes — but bounded. The user can Cancel
+         * sooner.
+         */
+        const val TRANSCRIBE_TIMEOUT_MS = 10 * 60 * 1000L
+    }
 }
