@@ -21,6 +21,7 @@ import com.quietstudio.core.model.ProjectContent
 import com.quietstudio.core.model.TemplateContent
 import com.quietstudio.core.model.VisualPack
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.Json
 import java.util.UUID
@@ -60,6 +61,13 @@ class ProjectRepository @Inject constructor(
     fun observeFolders(): Flow<List<FolderEntity>> = folderDao.observeAll()
 
     suspend fun get(id: String): Project? = projectDao.get(id)?.toDomain()
+
+    /** All projects, once — for backup export. */
+    suspend fun allProjectsOnce(): List<Project> =
+        projectDao.observeAll().first().map { it.toDomain() }
+
+    /** Inserts a restored project verbatim (new id assigned by the caller). */
+    suspend fun insertRestored(project: Project) = save(project, snapshot = false)
 
     suspend fun create(title: String, content: ProjectContent = ProjectContent()): Project {
         val now = System.currentTimeMillis()

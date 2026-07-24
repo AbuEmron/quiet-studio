@@ -12,7 +12,10 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.foundation.clickable
+import androidx.compose.material.icons.rounded.Backup
 import androidx.compose.material.icons.rounded.CheckCircle
+import androidx.compose.material.icons.rounded.Restore
 import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material.icons.rounded.FolderOpen
 import androidx.compose.material3.CircularProgressIndicator
@@ -42,6 +45,14 @@ fun SettingsScreen(
     val modelPicker = rememberLauncherForActivityResult(
         ActivityResultContracts.OpenDocument()
     ) { uri -> uri?.let { viewModel.importModel(it) } }
+
+    val backupLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument(com.quietstudio.data.ProjectBackup.MIME)
+    ) { uri -> uri?.let { viewModel.backupProjects(it) } }
+
+    val restoreLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri -> uri?.let { viewModel.restoreProjects(it) } }
 
     Column(
         Modifier
@@ -137,6 +148,49 @@ fun SettingsScreen(
             }
         }
 
+        SectionLabel("Projects & backup")
+        QuietCard(Modifier.fillMaxWidth().padding(horizontal = 20.dp)) {
+            Column(Modifier.padding(16.dp)) {
+                Text(
+                    "Your projects are saved on this device and survive app updates. " +
+                        "Back them up to a file to be safe across reinstalls — the backup " +
+                        "includes your recordings and can be restored anytime.",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(bottom = 10.dp),
+                )
+                Row {
+                    OutlinedButton(
+                        onClick = { backupLauncher.launch(com.quietstudio.data.ProjectBackup.suggestedName()) },
+                        enabled = !ui.backupBusy,
+                    ) {
+                        if (ui.backupBusy) {
+                            CircularProgressIndicator(Modifier.size(14.dp), strokeWidth = 2.dp)
+                        } else {
+                            Icon(Icons.Rounded.Backup, null, Modifier.size(16.dp))
+                        }
+                        Text("  Back up projects")
+                    }
+                    Text("  ")
+                    OutlinedButton(
+                        onClick = { restoreLauncher.launch(arrayOf("application/zip", "application/octet-stream", "*/*")) },
+                        enabled = !ui.backupBusy,
+                    ) {
+                        Icon(Icons.Rounded.Restore, null, Modifier.size(16.dp))
+                        Text("  Restore")
+                    }
+                }
+                ui.backupMessage?.let {
+                    Text(
+                        it,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = if (it.contains("failed", true)) MaterialTheme.colorScheme.error else Highlight,
+                        modifier = Modifier.padding(top = 10.dp).clickable { viewModel.clearBackupMessage() },
+                    )
+                }
+            }
+        }
+
         SectionLabel("Privacy")
         QuietCard(Modifier.fillMaxWidth().padding(horizontal = 20.dp)) {
             Column(Modifier.padding(16.dp)) {
@@ -159,7 +213,7 @@ fun SettingsScreen(
 
         SectionLabel("About")
         Text(
-            "Quiet Studio 1.12 — a private production room for one creator.",
+            "Quiet Studio 1.13 — a private production room for one creator.",
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp),

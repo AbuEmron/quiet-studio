@@ -17,8 +17,8 @@ android {
         applicationId = "com.quietstudio"
         minSdk = 26
         targetSdk = 35
-        versionCode = 15
-        versionName = "1.12"
+        versionCode = 16
+        versionName = "1.13"
 
         vectorDrawables { useSupportLibrary = true }
         buildConfigField("boolean", "WHISPER_ENABLED", enableWhisper.toString())
@@ -40,7 +40,24 @@ android {
         }
     }
 
+    signingConfigs {
+        // Committed, stable debug key so every build — local and CI — is signed
+        // with the SAME certificate. Without this, CI uses the runner's
+        // per-run auto-generated debug key, so each APK has a different
+        // signature; Android then refuses to install-over-top and the user must
+        // uninstall (wiping all project data). The debug password is the
+        // well-known "android" and carries no security value.
+        getByName("debug") {
+            storeFile = file("debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
+    }
     buildTypes {
+        getByName("debug") {
+            signingConfig = signingConfigs.getByName("debug")
+        }
         release {
             isMinifyEnabled = true
             isShrinkResources = true
@@ -60,6 +77,16 @@ android {
         // Keep bundled scene videos uncompressed so MediaMetadataRetriever can
         // open them by asset file descriptor for the export path.
         noCompress += "mp4"
+    }
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+            all {
+                // Robolectric loads a full Android runtime per test class; give
+                // the forked test JVM room so it doesn't OOM/crash the daemon.
+                it.maxHeapSize = "2g"
+            }
+        }
     }
     packaging {
         resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -108,5 +135,10 @@ dependencies {
     implementation(libs.coil.compose)
 
     testImplementation(libs.junit)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.androidx.test.core)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.room.testing)
+    testImplementation(platform(libs.androidx.compose.bom))
     debugImplementation(libs.androidx.ui.tooling)
 }

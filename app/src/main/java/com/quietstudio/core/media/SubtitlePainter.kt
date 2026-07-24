@@ -47,6 +47,8 @@ class SubtitlePainter(
             "serif" -> Typeface.create(Typeface.SERIF, Typeface.BOLD)
             "mono" -> Typeface.create(Typeface.MONOSPACE, Typeface.BOLD)
             "condensed" -> Typeface.create("sans-serif-condensed", Typeface.BOLD)
+            "handwritten" -> Typeface.create("cursive", Typeface.BOLD)
+            "display" -> Typeface.create("sans-serif-black", Typeface.BOLD)
             "light" -> Typeface.create("sans-serif-light", Typeface.NORMAL)
             else -> Typeface.create("sans-serif", Typeface.BOLD)
         }

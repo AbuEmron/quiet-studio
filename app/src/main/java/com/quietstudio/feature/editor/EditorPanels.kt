@@ -119,6 +119,7 @@ fun CaptionsSheet(
             Text(
                 buildAnnotatedCaption(text, emphasized, content.subtitleStyle.highlightEveryNthWord > 0),
                 style = MaterialTheme.typography.titleLarge,
+                fontFamily = subtitleFontFamily(content.subtitleStyle.fontId),
                 color = Color.White,
                 textAlign = androidx.compose.ui.text.style.TextAlign.Center,
             )
@@ -1019,14 +1020,40 @@ private fun PillButton(
     }
 }
 
+// Deliberately varied so the choice is obvious: clean sans, serif, heavy
+// display, handwritten, condensed, mono — plus the lighter Poppins weights.
 private val FONT_OPTIONS = listOf(
-    "poppins_bold" to "Poppins Bold",
+    "poppins_bold" to "Poppins",
+    "serif" to "Serif",
+    "display" to "Display",
+    "handwritten" to "Handwritten",
+    "condensed" to "Condensed",
+    "mono" to "Mono",
+    "inter" to "Inter",
     "poppins_semibold" to "Poppins Semi",
     "poppins_medium" to "Poppins Med",
-    "inter" to "Inter",
-    "serif" to "Serif",
-    "mono" to "Mono",
 )
+
+/** Compose FontFamily mirror of SubtitlePainter.typefaceFor for the preview card. */
+@Composable
+fun subtitleFontFamily(fontId: String): androidx.compose.ui.text.font.FontFamily = when (fontId) {
+    "poppins_bold" -> androidx.compose.ui.text.font.FontFamily(
+        androidx.compose.ui.text.font.Font(com.quietstudio.R.font.poppins_bold)
+    )
+    "poppins_semibold" -> androidx.compose.ui.text.font.FontFamily(
+        androidx.compose.ui.text.font.Font(com.quietstudio.R.font.poppins_semibold)
+    )
+    "poppins_medium" -> androidx.compose.ui.text.font.FontFamily(
+        androidx.compose.ui.text.font.Font(com.quietstudio.R.font.poppins_medium)
+    )
+    "inter" -> androidx.compose.ui.text.font.FontFamily(
+        androidx.compose.ui.text.font.Font(com.quietstudio.R.font.inter_variable)
+    )
+    "serif" -> androidx.compose.ui.text.font.FontFamily.Serif
+    "mono" -> androidx.compose.ui.text.font.FontFamily.Monospace
+    "handwritten" -> androidx.compose.ui.text.font.FontFamily.Cursive
+    else -> androidx.compose.ui.text.font.FontFamily.SansSerif
+}
 
 @Composable
 private fun FontSelector(selected: String, onSelect: (String) -> Unit) {
@@ -1051,6 +1078,7 @@ private fun FontSelector(selected: String, onSelect: (String) -> Unit) {
             ) {
                 Text(
                     label, style = MaterialTheme.typography.labelSmall,
+                    fontFamily = subtitleFontFamily(id),
                     color = if (sel) Color.White else TextSecondary,
                     maxLines = 1,
                 )

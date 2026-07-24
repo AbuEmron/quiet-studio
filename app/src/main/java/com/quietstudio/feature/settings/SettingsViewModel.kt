@@ -15,6 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val modelManager: WhisperModelManager,
+    private val backup: com.quietstudio.data.ProjectBackup,
 ) : ViewModel() {
 
     /** One row per catalog model, plus the imported file when present. */
@@ -36,6 +37,8 @@ class SettingsViewModel @Inject constructor(
         val downloadingFile: String? = null,
         val downloadProgress: Float? = null,
         val error: String? = null,
+        val backupBusy: Boolean = false,
+        val backupMessage: String? = null,
     )
 
     private val _ui = MutableStateFlow(UiState())
@@ -112,5 +115,41 @@ class SettingsViewModel @Inject constructor(
     fun useModel(fileName: String) {
         modelManager.setActive(fileName)
         refresh()
+    }
+
+    fun backupProjects(target: android.net.Uri) {
+        if (_ui.value.backupBusy) return
+        _ui.value = _ui.value.copy(backupBusy = true, backupMessage = null)
+        viewModelScope.launch {
+            _ui.value = try {
+                val r = backup.export(target)
+                _ui.value.copy(
+                    backupBusy = false,
+                    backupMessage = "Backed up ${r.count} project${if (r.count == 1) "" else "s"}.",
+                )
+            } catch (e: Exception) {
+                _ui.value.copy(backupBusy = false, backupMessage = "Backup failed: ${e.message}")
+            }
+        }
+    }
+
+    fun restoreProjects(source: android.net.Uri) {
+        if (_ui.value.backupBusy) return
+        _ui.value = _ui.value.copy(backupBusy = true, backupMessage = null)
+        viewModelScope.launch {
+            _ui.value = try {
+                val r = backup.import(source)
+                _ui.value.copy(
+                    backupBusy = false,
+                    backupMessage = "Restored ${r.count} project${if (r.count == 1) "" else "s"}.",
+                )
+            } catch (e: Exception) {
+                _ui.value.copy(backupBusy = false, backupMessage = "Restore failed: ${e.message}")
+            }
+        }
+    }
+
+    fun clearBackupMessage() {
+        _ui.value = _ui.value.copy(backupMessage = null)
     }
 }
