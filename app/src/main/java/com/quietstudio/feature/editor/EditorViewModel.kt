@@ -154,6 +154,33 @@ class EditorViewModel @Inject constructor(
 
     fun updateVisual(visual: VisualConfig) = mutate { it.copy(visual = visual) }
 
+    /**
+     * Toggles the one-tap professional grade. Turning it on samples a frame of
+     * the footage for auto exposure + white balance so the correction is
+     * baked once and shared by preview and export.
+     */
+    fun setEnhanceEnabled(enabled: Boolean) {
+        if (!enabled) {
+            mutate { it.copy(enhance = it.enhance.copy(enabled = false)) }
+            return
+        }
+        viewModelScope.launch {
+            val (autoE, autoW) = com.quietstudio.feature.camera.FrameAnalyzer
+                .analyze(context, content.visual.sourceUri)
+            mutate {
+                it.copy(enhance = it.enhance.copy(enabled = true, autoExposure = autoE, autoWarmth = autoW))
+            }
+        }
+    }
+
+    fun setEnhanceLook(look: String) = mutate {
+        it.copy(enhance = it.enhance.copy(look = look, enabled = true))
+    }
+
+    fun setEnhanceLetterbox(on: Boolean) = mutate {
+        it.copy(enhance = it.enhance.copy(letterbox = on))
+    }
+
     /** Sets a bundled animated scene video as the project background. */
     fun setAnimatedScene(scene: com.quietstudio.core.media.scenes.AnimatedScene) = mutate {
         it.copy(

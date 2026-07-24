@@ -207,6 +207,23 @@ data class ProjectContent(
     val visual: VisualConfig = VisualConfig(),
     val music: MusicSelection = MusicSelection(),
     val export: ExportConfig = ExportConfig(),
+    val enhance: EnhanceSettings = EnhanceSettings(),
+)
+
+/**
+ * One-tap "make it professional" grade, applied in preview and burned into
+ * export. [autoExposure] and [autoWarmth] are computed once from the footage
+ * when enhance is switched on, so the correction is deterministic and the same
+ * in both the preview and the export.
+ */
+@Serializable
+data class EnhanceSettings(
+    val enabled: Boolean = false,
+    /** CINEMATIC | WARM | NATURAL */
+    val look: String = "CINEMATIC",
+    val letterbox: Boolean = false,
+    val autoExposure: Float = 1f,
+    val autoWarmth: Float = 0f,
 )
 
 @Serializable

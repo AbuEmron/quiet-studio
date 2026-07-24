@@ -117,9 +117,19 @@ class Media3ExportEngine @Inject constructor() : MediaEngine {
             val audioSeq = EditedMediaItemSequence(
                 EditedMediaItem.Builder(MediaItem.fromUri(Uri.fromFile(mixWav))).build()
             )
+            // Enhance grade runs on the footage before the overlay paints
+            // subtitles / letterbox / grain, so captions stay ungraded.
+            val enhanceEffects = com.quietstudio.core.media.enhance.EnhanceEffects.build(project.enhance)
             val composition = Composition.Builder(videoSeq, audioSeq)
                 .setEffects(
-                    Effects(emptyList(), listOf<Effect>(presentation, overlayEffect))
+                    Effects(
+                        emptyList(),
+                        buildList<Effect> {
+                            add(presentation)
+                            addAll(enhanceEffects)
+                            add(overlayEffect)
+                        },
+                    )
                 )
                 .build()
 
@@ -307,7 +317,18 @@ private class TimelineOverlay(
         } else {
             scene.drawFrame(canvas, project.visual, timeMs, durationMs)
         }
+        if (project.enhance.enabled && project.enhance.letterbox) {
+            val bar = com.quietstudio.core.media.enhance.EnhanceGrade
+                .letterboxBarFraction(width, height) * height
+            if (bar > 0f) {
+                barPaint.color = Color.BLACK
+                canvas.drawRect(0f, 0f, width.toFloat(), bar, barPaint)
+                canvas.drawRect(0f, height - bar, width.toFloat(), height.toFloat(), barPaint)
+            }
+        }
         subtitles.draw(canvas, project.cues, project.subtitleStyle, timeMs)
         return bitmap
     }
+
+    private val barPaint = android.graphics.Paint()
 }

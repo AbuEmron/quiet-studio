@@ -821,6 +821,64 @@ fun ExportSheet(
 
 /* ============================ shared pieces ============================== */
 
+/* =============================== ENHANCE ================================ */
+
+@Composable
+fun EnhanceSheet(content: ProjectContent, vm: EditorViewModel, onClose: () -> Unit) {
+    val e = content.enhance
+    Column(Modifier.padding(bottom = 26.dp)) {
+        SheetTitleRow("Make it professional", onClose)
+
+        Text(
+            "One tap grades your footage — cinematic colour, auto exposure and " +
+                "white balance, gentle contrast and polish. Previewed here and burned " +
+                "into the export.",
+            style = MaterialTheme.typography.labelMedium,
+            color = TextSecondary,
+            modifier = Modifier.padding(horizontal = 20.dp, vertical = 6.dp),
+        )
+
+        SettingRow("Enhance") {
+            QuietSwitch(e.enabled) { vm.setEnhanceEnabled(it) }
+        }
+
+        if (e.enabled) {
+            SettingLabel("Look")
+            LazyRow(
+                contentPadding = PaddingValues(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                items(listOf("CINEMATIC" to "Cinematic", "WARM" to "Warm", "NATURAL" to "Natural")) { (key, label) ->
+                    val selected = e.look == key
+                    Box(
+                        Modifier
+                            .background(
+                                if (selected) Violet.copy(alpha = 0.18f) else CardHigh,
+                                RoundedCornerShape(12.dp),
+                            )
+                            .then(
+                                if (selected) Modifier.border(1.dp, Violet, RoundedCornerShape(12.dp))
+                                else Modifier
+                            )
+                            .clickable { vm.setEnhanceLook(key) }
+                            .padding(horizontal = 16.dp, vertical = 10.dp),
+                    ) {
+                        Text(
+                            label, style = MaterialTheme.typography.labelMedium,
+                            color = if (selected) Color.White else TextSecondary,
+                        )
+                    }
+                }
+            }
+            Spacer(Modifier.height(6.dp))
+            SettingRow("Cinematic letterbox") {
+                QuietSwitch(e.letterbox) { vm.setEnhanceLetterbox(it) }
+            }
+        }
+        Spacer(Modifier.height(10.dp))
+    }
+}
+
 @Composable
 private fun SheetTitleRow(title: String, onClose: () -> Unit, trailing: @Composable () -> Unit = {}) {
     Row(

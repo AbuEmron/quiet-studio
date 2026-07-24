@@ -62,6 +62,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asComposeRenderEffect
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
@@ -83,7 +85,7 @@ import com.quietstudio.ui.theme.TextSecondary
 import com.quietstudio.ui.theme.Violet
 import com.quietstudio.ui.theme.VioletSoft
 
-enum class EditorSheet { NONE, CAPTIONS, VISUAL, MUSIC, VOLUME, EXPORT }
+enum class EditorSheet { NONE, CAPTIONS, VISUAL, ENHANCE, MUSIC, VOLUME, EXPORT }
 
 /**
  * Edit Project — reference layout: preview + right tool rail, filmstrip
@@ -218,7 +220,11 @@ fun EditorScreen(
                         RailItem(Icons.Rounded.VerticalAlignCenter, "Position") {
                             captionsTab = 1; sheet = EditorSheet.CAPTIONS
                         }
-                        RailItem(Icons.Rounded.AutoAwesome, "Effects") { sheet = EditorSheet.VISUAL }
+                        RailItem(
+                            Icons.Rounded.AutoAwesome, "Enhance",
+                            subtitle = if (c.enhance.enabled) c.enhance.look.lowercase()
+                                .replaceFirstChar { it.uppercase() } else "Off",
+                        ) { sheet = EditorSheet.ENHANCE }
                         RailItem(Icons.Rounded.Wallpaper, "Background") { sheet = EditorSheet.VISUAL }
                         RailItem(
                             Icons.Rounded.MusicNote, "Music",
@@ -317,6 +323,7 @@ fun EditorScreen(
                         onClose = { sheet = EditorSheet.NONE },
                     )
                     EditorSheet.VISUAL -> VisualSheet(c, viewModel) { sheet = EditorSheet.NONE }
+                    EditorSheet.ENHANCE -> EnhanceSheet(c, viewModel) { sheet = EditorSheet.NONE }
                     EditorSheet.MUSIC -> MusicSheet(c, viewModel) { sheet = EditorSheet.NONE }
                     EditorSheet.VOLUME -> VolumeSheet(c, viewModel) { sheet = EditorSheet.NONE }
                     EditorSheet.EXPORT -> ExportSheet(c, viewModel, onExports) { sheet = EditorSheet.NONE }
@@ -574,7 +581,27 @@ fun PreviewSurface(
     val videoBacked = (kindEnum == BackgroundKind.ANIMATED || kindEnum == BackgroundKind.VIDEO) &&
         !sourceUri.isNullOrBlank()
 
+    // One-tap "make professional" grade, previewed here and burned into export.
+    // A RenderEffect colour-matrix grades the whole preview subtree (video +
+    // canvas) on API 31+; below that the preview shows ungraded but the export
+    // is still graded. Letterbox bars are drawn outside the graded layer so
+    // they stay pure black.
+    val enhance = content.enhance
+    val gradeEffect = remember(enhance) {
+        if (!enhance.enabled || android.os.Build.VERSION.SDK_INT < 31) null
+        else runCatching {
+            val m = com.quietstudio.core.media.enhance.EnhanceGrade
+                .colorMatrix(com.quietstudio.core.media.enhance.EnhanceGrade.levels(enhance))
+            android.graphics.RenderEffect.createColorFilterEffect(
+                android.graphics.ColorMatrixColorFilter(android.graphics.ColorMatrix(m))
+            ).asComposeRenderEffect()
+        }.getOrNull()
+    }
+
     Box(modifier.background(Color.Black)) {
+        Box(
+            Modifier.matchParentSize().graphicsLayer { renderEffect = gradeEffect },
+        ) {
         if (videoBacked) {
             ScenePlayer(uri = sourceUri!!, modifier = Modifier.matchParentSize())
         }
@@ -615,6 +642,24 @@ fun PreviewSurface(
                 )
             }
         }
+        } // canvas
+        } // graded layer
+
+        // Cinematic letterbox — drawn outside the graded layer so the bars stay
+        // pure black; matches the export overlay's bars.
+        if (enhance.enabled && enhance.letterbox) {
+            Canvas(Modifier.matchParentSize()) {
+                val bar = com.quietstudio.core.media.enhance.EnhanceGrade
+                    .letterboxBarFraction(size.width.toInt(), size.height.toInt()) * size.height
+                if (bar > 0f) {
+                    drawRect(Color.Black, size = androidx.compose.ui.geometry.Size(size.width, bar))
+                    drawRect(
+                        Color.Black,
+                        topLeft = androidx.compose.ui.geometry.Offset(0f, size.height - bar),
+                        size = androidx.compose.ui.geometry.Size(size.width, bar),
+                    )
+                }
+            }
         }
     }
 }
